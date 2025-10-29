@@ -1,26 +1,30 @@
-@import "tailwindcss";
+/* นี่คือไฟล์ app/globals.css (เวอร์ชัน CSS ธรรมดา) */
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* 1. รีเซ็ต CSS พื้นฐาน */
+body, h1, h2, h3, h4, p, a {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* 2. ตั้งค่าสไตล์ Apple.com (มินิมอล) */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* นี่คือสิ่งที่เราพยายามทำมาตลอด */
+  background-color: #ffffff; /* พื้นหลังสีขาว */
+  color: #1d1d1f; /* ตัวหนังสือสีเทาเข้ม (เหมือน Apple) */
+
+  /* 3. ตั้งค่าฟอนต์ Kanit (จากไฟล์ layout.tsx) */
+  /* เราใช้ 'font-family: var(--font-kanit)' 
+     ซึ่งมาจาก layout.tsx ที่เราทำไว้ (ส่วนนั้นถูกต้องดีอยู่แล้ว) 
+  */
+  font-family: var(--font-kanit), "sans-serif";
+  
+  /* ทำให้ฟอนต์คมชัด */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ตั้งค่าฟอนต์สำรอง Sarabun */
+.font-sarabun {
+  font-family: var(--font-sarabun), "serif";
 }
