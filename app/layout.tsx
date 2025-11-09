@@ -1,42 +1,23 @@
-// TAG: [Master-Plan] (1)
-import { Kanit, Sarabun } from "next/font/google";
+// 📍 ที่อยู่ไฟล์: app/layout.tsx (Root Layout)
+// (ฉบับแก้ไข: ลบ <html>, <body>, และ Inter ทิ้ง)
 
-// TAG: [Master-Plan] (2)
-import "./globals.css"; // (ถูกต้อง)
+// (แก้) Import globals.css ที่นี่
+import './globals.css';
 
-// TAG: [Fix-v4] (1)
-// เราต้องใช้ 'variable' กับ Kanit ด้วย
-const kanit = Kanit({
-  subsets: ["thai", "latin"],
-  weight: ["300", "400", "500", "700"],
-  variable: '--font-kanit', // <--- **สำคัญ**
-  display: 'swap',
-});
-
-// TAG: [Master-Plan] (4)
-const sarabun = Sarabun({
-  subsets: ["thai", "latin"],
-  weight: ["400", "700"],
-  variable: '--font-sarabun', // (ถูกต้อง)
-  display: 'swap',
-});
+// (ลบ) metadata (ย้ายไป locale layout)
+// (ลบ) Inter (ย้ายไป locale layout)
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.React.Node;
 }) {
+  // * TAG: [Fix-Nested-HTML]
+  // * ห้ามมี <html> หรือ <body> ที่นี่
+  // * คืนค่า children โดยตรง เพื่อให้ locale layout จัดการ
   return (
-    // TAG: [Fix-Hook-Animation] (1)
-    // เพิ่ม 'className="scroll-smooth"' ที่นี่
-    // นี่คือคำสั่งที่บอกเบราว์เซอร์ให้ "เลื่อน" (Scroll)
-    // แทนการ "กระโดด" (Jump)
-    <html lang="en" suppressHydrationWarning className="scroll-smooth">
-      
-      {/* (body className ฯลฯ ของคุณ ถูกต้องเหมือนเดิม) */}
-      <body className={`${kanit.variable} ${sarabun.variable} font-sans`}>
-        {children}
-      </body>
-    </html>
+    <>
+      {children}
+    </>
   );
 }

@@ -1,20 +1,31 @@
-/*
- * TAG: [Tailwind v4] 
- * (ตามที่ Claude AI แนะนำ)
- * 1. Import "tailwindcss"
- * 2. ใช้ @theme เพื่อกำหนดฟอนต์
+/* 📍 ที่อยู่ไฟล์: app/globals.css */
+
+/* * TAG: [Tailwind v4]
 */
 @import "tailwindcss";
 
-@theme {
-  /* * TAG: [Fix-v4] (2)
-   * เชื่อมฟอนต์ Kanit/Sarabun (จาก app/layout.tsx)
-   * เข้ากับ Tailwind v4
-  */
-  --font-sans: var(--font-kanit), ui-sans-serif, system-ui;
-  --font-serif: var(--font-sarabun), ui-serif;
-}
-
 /*
- * Custom styles อื่นๆ (ถ้ามี) สามารถใส่ต่อตรงนี้ได้
+* TAG: [Fix-Dark-Mode-CSS]
+* "ต้อง" ไม่มีกฎ @layer base หรือ @theme { --font-sans: ... } ที่นี่
+* เพราะมันจะขัดแย้งกับ root layout (app/layout.tsx)
 */
+
+/* * TAG: [Scrollbar]
+* (ส่วนนี้เก็บไว้ได้ เพราะมันทำงานถูกต้อง)
+*/
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9; /* slate-100 */
+}
+::-webkit-scrollbar-thumb {
+  background: #94a3b8; /* slate-400 */
+  border-radius: 4px;
+}
+html.dark ::-webkit-scrollbar-track {
+  background: #0f172a; /* slate-900 */
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: #475569; /* slate-600 */
+}

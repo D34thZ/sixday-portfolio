@@ -1,5 +1,13 @@
+// 📍 ที่อยู่ไฟล์: tailwind.config.js
+// (ฉบับสมบูรณ์และถูกต้อง)
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  // * TAG: [Fix-Dark-Mode-CSS]
+  // * 1. นี่คือบรรทัดที่ "สำคัญที่สุด"
+  // * 2. มันบอก Tailwind ให้มองหา "class='dark'" ที่ <html>
+  darkMode: 'class',
+  
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -7,11 +15,7 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {
-      // TAG: [Fix-v4] (3)
-      // "ลบ" fontFamily ออกจากตรงนี้
-      // เพราะเราย้ายไปกำหนดใน @theme (globals.css) แล้ว
-    },
+    extend: {},
   },
   plugins: [],
 };

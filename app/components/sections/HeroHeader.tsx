@@ -7,8 +7,6 @@ export default function HeroHeader() {
   const canvasRef = useRef(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  // ( ... โค้ด useEffect, Particle, animate ทั้งหมดของคุณ ... )
-  // ( ... ผมย่อส่วนนี้ไว้เพื่อให้อ่านง่าย แต่คุณต้อง copy มาทั้งหมด ... )
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -50,8 +48,12 @@ export default function HeroHeader() {
       }
       
       draw() {
+        // (แก้) เปลี่ยนสี Particle ให้อ่อนลงใน Dark Mode
+        const isDark = document.documentElement.classList.contains('dark');
+        const particleColor = isDark ? 'rgba(147, 197, 253, 0.4)' : 'rgba(59, 130, 246, 0.4)'; // blue-300 vs blue-600
         const opacity = Math.sin(this.life) * 0.3 + 0.3;
-        ctx.fillStyle = `rgba(59, 130, 246, ${opacity * 0.4})`;
+        
+        ctx.fillStyle = particleColor.replace('0.4', `${opacity * 0.4}`);
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -63,8 +65,9 @@ export default function HeroHeader() {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
       
-      // Draw grid with perspective - สีเทาอ่อนมาก
-      ctx.strokeStyle = 'rgba(148, 163, 184, 0.15)';
+      // (แก้) เปลี่ยนสี Grid ใน Dark Mode
+      const isDark = document.documentElement.classList.contains('dark');
+      ctx.strokeStyle = isDark ? 'rgba(51, 65, 85, 0.2)' : 'rgba(148, 163, 184, 0.15)'; // slate-700 vs slate-400
       ctx.lineWidth = 0.5;
       
       const gridSize = 50;
@@ -90,8 +93,9 @@ export default function HeroHeader() {
         p.update();
         p.draw();
       });
-      // Draw connections - เส้นเชื่อมบางและอ่อนมาก
-      ctx.strokeStyle = 'rgba(59, 130, 246, 0.08)';
+      
+      // (แก้) เปลี่ยนสีเส้นเชื่อมใน Dark Mode
+      ctx.strokeStyle = isDark ? 'rgba(147, 197, 253, 0.1)' : 'rgba(59, 130, 246, 0.08)'; // blue-300 vs blue-600
       ctx.lineWidth = 0.5;
       
       for (let i = 0; i < particles.length; i++) {
@@ -108,14 +112,15 @@ export default function HeroHeader() {
           }
         }
       }
-      // Mouse interaction - glow สีน้ำเงินอ่อน
+      // (แก้) เปลี่ยนสี Mouse Glow ใน Dark Mode
       if (mousePos.x && mousePos.y) {
         const gradient = ctx.createRadialGradient(
           mousePos.x, mousePos.y, 0,
           mousePos.x, mousePos.y, 120
         );
-        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.08)');
-        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+        const glowColor = isDark ? 'rgba(147, 197, 253, 0.1)' : 'rgba(59, 130, 246, 0.08)';
+        gradient.addColorStop(0, glowColor);
+        gradient.addColorStop(1, glowColor.replace('0.1', '0').replace('0.08', '0'));
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
       }
@@ -138,11 +143,6 @@ export default function HeroHeader() {
   };
 
   return (
-    // TAG: [Fix-Screen] (1)
-    // นี่คือจุดที่แก้ไขตามคำขอของคุณ
-    // ลบ 'h-screen' และ 'bg-white'
-    // เปลี่ยนเป็น 'h-[80vh]' (สูง 80% ของจอ)
-    // Canvas จะวาดลงบน Gradient ของ 'page.tsx' โดยตรง
     <header className="relative w-full h-[80vh] overflow-hidden">
       {/* Animated Canvas Background */}
       <canvas
@@ -150,35 +150,48 @@ export default function HeroHeader() {
         onMouseMove={handleMouseMove}
         className="absolute inset-0 w-full h-full"
       />
-      
-      {/* ... โค้ดที่เหลือทั้งหมด (Overlays, Shapes, Content) ... */}
-      {/* ... คัดลอกโค้ดส่วนที่เหลือของคุณมาวางที่นี่ ... */}
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-50/30 via-transparent to-slate-50/40" />
-      <div className="absolute top-32 right-32 w-96 h-96 border border-slate-200/40 rotate-45 animate-[spin_25s_linear_infinite]" />
-      <div className="absolute bottom-24 left-24 w-64 h-64 border border-blue-200/30 rotate-12 animate-[spin_20s_linear_infinite_reverse]" />
-      <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-blue-400/40 rounded-full blur-sm animate-[float_6s_ease-in-out_infinite]" />
-      <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-slate-400/30 rounded-full blur-sm animate-[float_8s_ease-in-out_infinite_reverse]" />
+            
+      {/* (แก้) Subtle gradient overlay (รวบเป็นบรรทัดเดียว) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-50/30 via-transparent to-slate-50/40 dark:from-blue-900/10 dark:to-slate-950/30" />
+            
+      {/* (แก้) Geometric shapes (รวบเป็นบรรทัดเดียว) */}
+      <div className="absolute top-32 right-32 w-96 h-96 border border-slate-200/40 rotate-45 animate-[spin_25s_linear_infinite] dark:border-slate-800/40" />
+      <div className="absolute bottom-24 left-24 w-64 h-64 border border-blue-200/30 rotate-12 animate-[spin_20s_linear_infinite_reverse] dark:border-blue-900/30" />
+            
+      {/* (แก้) Floating orbs (รวบเป็นบรรทัดเดียว) */}
+      <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-blue-400/40 rounded-full blur-sm animate-[float_6s_ease-in-out_infinite] dark:bg-blue-300/40" />
+      <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-slate-400/30 rounded-full blur-sm animate-[float_8s_ease-in-out_infinite_reverse] dark:bg-slate-600/30" />
+            
+      {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center">
+        {/* (แก้) Main heading (รวบเป็นบรรทัดเดียว) */}
         <div className="relative mb-6">
-          <h1 className="relative text-7xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-br from-slate-900 via-slate-700 to-slate-900 tracking-tight">
+          <h1 className="relative text-7xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-br from-slate-900 via-slate-700 to-slate-900 dark:from-slate-100 dark:via-slate-300 dark:to-white tracking-tight">
             SIXDAY
           </h1>
-          <div className="absolute inset-0 text-7xl md:text-8xl lg:text-9xl font-black text-blue-500/5 blur-2xl">
+          {/* (แก้) Subtle glow effect (รวบเป็นบรรทัดเดียว) */}
+          <div className="absolute inset-0 text-7xl md:text-8xl lg:text-9xl font-black text-blue-500/5 dark:text-blue-400/10 blur-2xl">
             SIXDAY
           </div>
         </div>
+                
         <div className="space-y-5 max-w-3xl">
-          <h2 className="text-2xl md:text-4xl font-semibold text-slate-800 tracking-tight">
+          {/* (แก้) Subheading (รวบเป็นบรรทัดเดียว) */}
+          <h2 className="text-2xl md:text-4xl font-semibold text-slate-800 dark:text-slate-100 tracking-tight">
             Full-Stack Software Engineer
           </h2>
-          <p className="text-lg md:text-xl text-slate-600 font-light leading-relaxed max-w-2xl mx-auto">
+                    
+          {/* (แก้) Paragraph (รวบเป็นบรรทัดเดียว) */}
+          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 font-light leading-relaxed max-w-2xl mx-auto">
             Architecting scalable solutions with cutting-edge technologies
           </p>
+                    
+          {/* (แก้) Tech Stack Pills (รวบเป็นบรรทัดเดียว) */}
           <div className="flex flex-wrap justify-center gap-3 pt-8">
             {['React', 'Next.js', 'TypeScript', 'Node.js', 'AI/ML'].map((tech, i) => (
               <span
                 key={tech}
-                className="px-5 py-2.5 bg-white/80 backdrop-blur-xl border border-slate-200/60 rounded-full text-slate-700 text-sm font-medium hover:bg-slate-50 hover:border-slate-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 cursor-default"
+                className="px-5 py-2.5 bg-white/80 backdrop-blur-xl border border-slate-200/60 rounded-full text-slate-700 dark:bg-slate-800/80 dark:border-slate-700/60 dark:text-slate-200 text-sm font-medium hover:bg-slate-50 hover:border-slate-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/10 dark:hover:bg-slate-700 dark:hover:border-slate-600 dark:hover:shadow-blue-400/10 transition-all duration-300 cursor-default"
                 style={{ 
                    animationDelay: `${i * 100}ms`,
                   boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
@@ -189,20 +202,27 @@ export default function HeroHeader() {
             ))}
           </div>
         </div>
+        
+        {/* (แก้) CTA Buttons (รวบเป็นบรรทัดเดียว) */}
         <div className="mt-14 flex flex-col sm:flex-row gap-4">
-          <button className="group relative px-8 py-4 bg-blue-600 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:bg-blue-700 hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/30">
+          <button className="group relative px-8 py-4 bg-blue-600 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:bg-blue-700 hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/30 dark:shadow-blue-400/20">
             <span className="relative z-10">View Projects</span>
           </button>
-          <button className="px-8 py-4 bg-white border border-slate-200 rounded-xl font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+                    
+          <button className="px-8 py-4 bg-white border border-slate-200 rounded-xl font-semibold text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:shadow-lg dark:hover:bg-slate-700 dark:hover:border-slate-600 dark:hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
             Contact Me
           </button>
         </div>
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-slate-300 rounded-full flex items-start justify-center p-2">
-            <div className="w-1 h-3 bg-slate-400 rounded-full animate-[scroll_1.5s_ease-in-out_infinite]" />
+
+        {/* (แก้) Scroll Indicator (รวบเป็นบรรทัดเดียว) */}
+        <div className="relative mt-12 mx-auto animate-bounce sm:absolute sm:bottom-12 sm:left-1/2 sm:-translate-x-1/2 sm:mt-0 sm:mx-0">
+          <div className="w-6 h-10 border-2 border-slate-300 dark:border-slate-700 rounded-full flex items-start justify-center p-2">
+            <div className="w-1 h-3 bg-slate-400 dark:bg-slate-500 rounded-full animate-[scroll_1.5s_ease-in-out_infinite]" />
           </div>
         </div>
+
       </div>
+
       <style jsx>{`
         @keyframes float {
           0%, 100% { 
