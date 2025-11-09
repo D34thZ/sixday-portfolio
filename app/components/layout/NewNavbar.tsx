@@ -1,98 +1,142 @@
 // 📍 ที่อยู่ไฟล์: app/components/layout/NewNavbar.tsx
-// TAG: [Client] (ถูกต้อง)
 'use client';
 
-// TAG: [Imports] (1)
-// Import ทุกอย่างที่เราต้องใช้
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+// 1. "เพิ่ม" import 'Image'
+import Image from 'next/image';
 
-// TAG: [Component] (2)
-// เราจะเก็บโครงสร้างเดิมของ NewNavbar ไว้
+// TAG: [Mobile-Nav] (1)
+// (ส่วน HamburgerButton คงเดิม)
+const HamburgerButton = ({ isOpen, toggle, color }: { isOpen: boolean, toggle: () => void, color: string }) => (
+  <motion.button
+    onClick={toggle}
+    className={`relative z-50 h-8 w-8 ${color} transition-colors`}
+    animate={isOpen ? "open" : "closed"}
+    aria-label="Toggle menu"
+  >
+    <motion.span
+      style={{ left: '50%', top: '35%', x: '-50%', y: '-50%' }}
+      className="absolute h-0.5 w-6 bg-current"
+      variants={{
+        open: { rotate: 45, top: '50%' },
+        closed: { rotate: 0, top: '35%' }
+      }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
+    />
+    <motion.span
+      style={{ left: '50%', top: '50%', x: '-50%', y: '-50%' }}
+      className="absolute h-0.5 w-6 bg-current"
+      variants={{
+        open: { opacity: 0 },
+        closed: { opacity: 1 }
+      }}
+      transition={{ duration: 0.1 }}
+    />
+    <motion.span
+      style={{ left: '50%', top: '65%', x: '-50%', y: '-50%' }}
+      className="absolute h-0.5 w-6 bg-current"
+      variants={{
+        open: { rotate: -45, top: '50%' },
+        closed: { rotate: 0, top: '65%' }
+      }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
+    />
+  </motion.button>
+);
+
+// TAG: [Mobile-Nav] (2)
+// (ส่วน MobileMenuOverlay คงเดิม)
+const MobileMenuOverlay = ({ items, onClose }: { items: any[], onClose: () => void }) => (
+  <motion.div
+    className="fixed inset-0 z-40 flex flex-col items-center justify-center space-y-8
+               bg-white" 
+    initial={{ x: '100%' }}
+    animate={{ x: 0 }}
+    exit={{ x: '100%' }}
+    transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
+  >
+    {items.map((item, index) => (
+      <motion.div
+        key={item.id}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeInOut', delay: 0.2 + index * 0.1 }}
+      >
+        <Link
+          href={item.href}
+          onClick={onClose} 
+          className="font-mono text-3xl text-slate-900 transition-colors hover:text-blue-600 font-bold"
+        >
+          &lt;/{item.label}&gt;
+        </Link>
+      </motion.div>
+    ))}
+  </motion.div>
+);
+
+
 export function NewNavbar() {
-  // TAG: [State] (3)
-  // State 1: 'scrolled' (เหมือนเดิม)
   const [scrolled, setScrolled] = useState(false);
-  
-  // State 2: 'hoveredItem' (จากไอเดีย Code Dark/Blue)
-  // เราจะเก็บ 'id' (เช่น 'home', 'work') ของเมนูที่กำลังชี้
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-
-  // TAG: [i18n] (4) (เหมือนเดิม)
+  
+  // TAG: [Mobile-Nav] (3)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
   const params = useParams();
   const locale = params.locale as string; 
 
-  // TAG: [Effect] (5) (เหมือนเดิม)
-  // ตัวดักฟังการ Scroll
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50); // เปลี่ยนเป็น 50 (จากไอเดีย Code White)
+      setScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // TAG: [Data] (6)
-  // สร้าง Array ของเมนูเพื่อง่ายต่อการ map (จากไอเดีย Code Dark/Blue)
   const navItems = [
-    { id: 'home', href: `/${locale}`, label: 'home', number: '01', splitAt: 3 },
-    { id: 'expertise', href: `/${locale}/expertise`, label: 'expertise', number: '02', splitAt: 8 },
-    { id: 'work', href: `/${locale}/work`, label: 'work', number: '03', splitAt: 3 },
-    { id: 'experience', href: `/${locale}/experience`, label: 'experience', number: '04', splitAt: 9 },
-    { id: 'contact', href: `/${locale}/contact`, label: 'contact', number: '05', splitAt: 6 },
+    { id: 'home', href: `/${locale}#home`, label: 'home', number: '01', splitAt: 3 },
+    { id: 'expertise', href: `/${locale}#expertise`, label: 'expertise', number: '02', splitAt: 8 },
+    { id: 'work', href: `/${locale}#work`, label: 'work', number: '03', splitAt: 3 },
+    { id: 'experience', href: `/${locale}#experience`, label: 'experience', number: '04', splitAt: 9 },
+    { id: 'contact', href: `/${locale}#contact`, label: 'contact', number: '05', splitAt: 6 },
   ];
 
-  // TAG: [Layout] (7) "ชุดเมนู" (MenuLinks)
-  // นี่คือส่วนที่รวมสไตล์จาก 'Code White' และ 'Code Dark/Blue'
+  // (ส่วน MenuLinks)
   const MenuLinks = ({ className, textColor }: { className?: string, textColor: string }) => (
     <nav
-      // TAG: [Style-White] (A)
-      // ใช้ flex, justify-center, gap-10 (จาก Code White)
       className={`flex justify-center items-center gap-10 ${className}`}
-      // TAG: [Style-Dark] (B)
-      // เมื่อเมาส์ออกจาก <nav> ให้เคลียร์ 'hoveredItem'
       onMouseLeave={() => setHoveredItem(null)}
     >
       {navItems.map((item) => {
-        // TAG: [Style-White] (C)
-        // แยกตัวอักษรก่อน-หลัง (จาก Code White)
+        // TAG: [Fix-Text-Glitch] (1)
+        // นี่คือจุด "ซ่อม" ครับ
         const before = item.label.slice(0, item.splitAt);
-        const after = item.label.slice(item.splitAt);
+        const after = item.label.slice(item.splitAt); // <--- แก้ไขแล้ว
         
-        // TAG: [Style-Dark] (D)
-        // ตรวจสอบว่าเมนูนี้คือเมนูที่กำลังชี้หรือไม่
         const isHovered = hoveredItem === item.id;
-        // ตรวจสอบว่ามีเมนู "อื่น" กำลังถูกชี้หรือไม่
         const isOtherHovered = hoveredItem !== null && !isHovered;
 
         return (
           <Link
             key={item.id}
             href={item.href}
-            // TAG: [Style-Dark] (E)
-            // เมื่อเมาส์ชี้ ให้ตั้งค่า 'hoveredItem'
             onMouseEnter={() => setHoveredItem(item.id)}
-            
-            // TAG: [Style-Merge] (F)
-            // นี่คือหัวใจหลัก:
-            // 1. ใช้สไตล์พื้นฐาน (font-mono, text-sm, ฯลฯ) จาก Code White
-            // 2. ใช้ 'textColor' ที่ส่งมาจาก 'scrolled' state
-            // 3. ใช้ 'isHovered' / 'isOtherHovered' (จาก Code Dark/Blue) เพื่อเปลี่ยน opacity
             className={`
-              relative transition-all duration-300 font-mono text-sm tracking-wide
+              relative transition-all duration-300 ease-out font-mono tracking-wide font-bold
+              text-[17.6px] 
               ${textColor}
-              ${isHovered ? 'opacity-100 scale-105' : ''}
+              ${isHovered ? 'opacity-100' : ''} 
               ${isOtherHovered ? 'opacity-50' : ''}
             `}
           >
-            {/* TAG: [Style-White] (G) โครงสร้างตัวอักษร */}
             &lt;/{before}
             <span className="relative">
               <span className={`
-                absolute -top-4 left-1/2 -translate-x-1/2 text-[10px] font-bold 
-                transition-opacity duration-300
+                absolute -top-4 left-1/2 -translate-x-1/2 text-[10px] 
+                transition-opacity duration-300 ease-out
                 ${isHovered ? 'opacity-100' : 'opacity-60'}
                 ${isOtherHovered ? 'opacity-30' : ''}
               `}>
@@ -107,55 +151,125 @@ export function NewNavbar() {
   );
 
   // TAG: [Render] (8)
-  // ใช้ 'AnimatePresence' (จากไฟล์เดิมของเรา)
-  // แต่ใช้สไตล์จาก 'Code White'
   return (
     <header 
-      // TAG: [Style-White] (H)
-      // ตั้งค่า header ให้ลอยอยู่ด้านบน (h-24, pt-10)
-      className="fixed top-0 left-0 right-0 z-50 h-24 pt-10 transition-all duration-400"
+      className="fixed top-0 left-0 right-0 z-50 h-24"
     >
       <AnimatePresence initial={false}>
         {/*
-          TAG: [Navbar-1] (โปร่งใส ตอนอยู่บนสุด) 
-        */}
-        {!scrolled && (
+          TAG: [Navbar-1] (โปร่งใส) 
+        */
+        !scrolled && (
           <motion.div
             key="nav1"
-            className="w-full h-full"
-            exit={{ opacity: 0, y: '-100%' }} // Animation เดิมของเรา
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            className="absolute inset-0 pt-10" 
+            exit={{ opacity: 0 }} 
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-            {/* TAG: [Style-White] (I) ใช้ข้อความสีเข้ม */}
-            <MenuLinks textColor="text-gray-900" />
+            {/* TAG: [Fix-Logo-Layout] (1) */}
+            <div className="relative max-w-7xl mx-auto px-6 h-full flex justify-between items-center">
+              
+              {/* (Slot 1) โลโก้ (ซ้าย) */}
+              <Link href={`/${locale}#home`} className="flex items-center gap-3">
+                
+                {/* TAG: [Logo-Update] (2) */}
+                <Image
+                  src="/images/Gemini_Generated_Image_45bpjp45bpjp45bp.png"
+                  width={52}
+                  height={52}
+                  alt="Sixday.dev Logo"
+                  className="rounded-full" // ทำให้เป็นวงกลม
+                />
+
+                {/* ข้อความโลโก้ */}
+                <span className="text-gray-900 text-3xl font-bold">
+                  Sixday._
+                </span>
+              </Link>
+
+              {/* (Slot 2) เมนู Desktop (กลาง) */}
+              <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                <MenuLinks textColor="text-gray-900" />
+              </div>
+
+              {/* (Slot 3) ปุ่ม Mobile (ขวา) */}
+              <div className="md:hidden">
+                <HamburgerButton 
+                  isOpen={isMobileMenuOpen}
+                  toggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  color="text-gray-900"
+                />
+              </div>
+
+            </div>
           </motion.div>
         )}
 
         {/*
-          TAG: [Navbar-2] (พื้นหลังทึบ ตอน scroll) 
-        */}
-        {scrolled && (
+          TAG: [Navbar-2] (ขาวเบลอ) 
+        */
+        scrolled && (
           <motion.div
             key="nav2"
-            className="w-full h-full relative" // Animation เดิมของเรา
-            initial={{ opacity: 0, y: '-100%' }}
-            animate={{ opacity: 1, y: '0%' }}
-            exit={{ opacity: 0, y: '-100%' }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            className="absolute inset-0 pt-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-            {/* TAG: [Style-White] (J) พื้นหลังสีเข้มทึบ */}
             <motion.div 
-              className="absolute inset-0 bg-[#1A191D] -z-10 shadow-lg shadow-black/20"
+              className="absolute inset-0 bg-white/90 backdrop-blur-md -z-10 shadow-lg shadow-black/5"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             />
             
-            {/* TAG: [Style-White] (K) ใช้ข้อความสีขาว */}
-            <MenuLinks textColor="text-[#FBFBFC]" />
+            {/* TAG: [Fix-Logo-Layout] (2) */}
+            <div className="relative max-w-7xl mx-auto px-6 h-full flex justify-between items-center">
+              
+              {/* (Slot 1) โลโก้ (ซ้าย) */}
+              <Link href={`/${locale}#home`} className="flex items-center gap-3">
+                
+                {/* TAG: [Logo-Update] (3) */}
+                <Image
+                  src="/images/Gemini_Generated_Image_45bpjp45bpjp45bp.png"
+                  width={52}
+                  height={52}
+                  alt="Sixday.dev Logo"
+                  className="rounded-full" // ทำให้เป็นวงกลม
+                />
+                
+                <span className="text-gray-900 text-3xl font-bold">
+                  Sixday._
+                </span>
+              </Link>
+
+              {/* (Slot 2) เมนู Desktop (กลาง) */}
+              <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                <MenuLinks textColor="text-gray-900" />
+              </div>
+
+              {/* (Slot 3) ปุ่ม Mobile (ขวา) */}
+              <div className="md:hidden">
+                <HamburgerButton 
+                  isOpen={isMobileMenuOpen}
+                  toggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  color="text-gray-900"
+                />
+              </div>
+
+            </div>
           </motion.div>
         )}
+      </AnimatePresence>
 
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <MobileMenuOverlay 
+            items={navItems} 
+            onClose={() => setIsMobileMenuOpen(false)} 
+          />
+        )}
       </AnimatePresence>
     </header>
   );

@@ -1,3 +1,5 @@
+// 📍 ที่อยู่ไฟล์: middleware.ts
+
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -13,6 +15,8 @@ export function middleware(request: NextRequest) {
   );
 
   // TAG: [Routing] (คงเดิม) ข้ามไฟล์ static
+  // * หมายเหตุ: 'matcher' (ด้านล่าง) คือตัวจัดการหลัก
+  // * บล็อกนี้แทบจะไม่ถูกเรียกใช้ ถ้า 'matcher' ทำงานถูกต้อง
   if (pathname.startsWith('/_next') || pathname.startsWith('/favicon.ico')) {
     return NextResponse.next();
   }
@@ -23,20 +27,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(newUrl);
   }
 
-  // TAG: [Fix-7.0] (1) อัปเกรด Middleware
-  // ถ้า Path "มี" locale (เช่น /th)
-  // เราจะ "ดึง" locale นั้นออกมา
-  // (เช่น "/th/about" -> "th", หรือ "/en" -> "en")
+  // ... (ส่วน Fix-7.0, Headers, ฯลฯ ของคุณ ถูกต้อง 100% ครับ) ...
   const currentLocale = pathname.split('/')[1];
-
-  // TAG: [Fix-7.0] (2) สร้าง Headers ใหม่
   const requestHeaders = new Headers(request.headers);
-  // (ตั้งค่า custom header 'X-Locale' ให้มีค่าเป็น 'th' หรือ 'en')
   requestHeaders.set('X-Locale', currentLocale); 
 
-  // TAG: [Fix-7.0] (3) ส่ง request ต่อไป
-  // พร้อมกับ Headers ที่มี 'X-Locale' แนบไปด้วย
-  // นี่คือ "การส่งต่อ" ข้อมูล locale ไปให้ layout.tsx ครับ
   return NextResponse.next({
     request: {
       headers: requestHeaders,
@@ -44,7 +39,17 @@ export function middleware(request: NextRequest) {
   });
 }
 
+// TAG: [Fix-404] (1)
+// นี่คือจุด "ซ่อม" ครับ
 export const config = {
-  // TAG: [Routing] (คงเดิม) ดักจับทุก Path
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
+  matcher: [
+    // (1) เราจะ "ดักจับ" ทุก Path
+    // (2) "ยกเว้น" (?!...) Path ที่เป็น:
+    //     - api
+    //     - _next/static
+    //     - _next/image
+    //     - images  <--- เพิ่ม 'images' เข้าไปในรายการเพิกเฉย
+    //     - favicon.ico
+    '/((?!api|_next/static|_next/image|images|favicon.ico).*)'
+  ]
 };

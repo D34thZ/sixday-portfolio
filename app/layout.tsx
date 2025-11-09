@@ -27,15 +27,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    // TAG: [Fix-Hook-Animation] (1)
+    // เพิ่ม 'className="scroll-smooth"' ที่นี่
+    // นี่คือคำสั่งที่บอกเบราว์เซอร์ให้ "เลื่อน" (Scroll)
+    // แทนการ "กระโดด" (Jump)
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
       
-      {/*
-        * TAG: [Fix-v4] (2)
-        * 1. ส่ง 'kanit.variable' เข้าไป
-        * 2. ส่ง 'sarabun.variable' เข้าไป
-        * 3. **ลบ 'bg-white' ออก** (ให้ Page จัดการเอง)
-        * 4. เพิ่ม 'font-sans' เพื่อบอก Tailwind ให้ใช้ฟอนต์ Kanit เป็นหลัก
-      */}
+      {/* (body className ฯลฯ ของคุณ ถูกต้องเหมือนเดิม) */}
       <body className={`${kanit.variable} ${sarabun.variable} font-sans`}>
         {children}
       </body>
