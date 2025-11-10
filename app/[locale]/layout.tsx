@@ -1,6 +1,6 @@
 // 📍 ที่อยู่ไฟล์: app/[locale]/layout.tsx
 
-// (Imports ทั้งหมดเหมือนเดิม)
+// (Imports)
 import '../globals.css'; 
 import { ClientProviders } from "../ClientProviders";
 import { NewNavbar } from "../components/layout/NewNavbar";
@@ -9,6 +9,26 @@ import enMessages from "../../messages/en.json";
 import { Inter } from 'next/font/google'; 
 import { CustomThemeProvider } from '../contexts/ThemeContext';
 import { ThemeScript } from '../components/ThemeScript';
+// TAG: [THE-FIX] (1/3) Import Footer ที่นี่
+import Footer from '../components/layout/Footer';
+
+// (ส่วน tNav คงเดิม)
+const enNav = {
+  home: "home",
+  expertise: "expertise",
+  work: "work",
+  experience: "experience",
+  contact: "contact"
+};
+
+const thNav = {
+  home: "หน้าหลัก",
+  expertise: "ตัวตน",
+  work: "ผลงาน",
+  experience: "เส้นทาง",
+  contact: "ติดต่อ"
+};
+// (จบส่วนที่เพิ่ม)
 
 export const metadata = {
   title: "sixday.dev",
@@ -27,28 +47,43 @@ export default async function LocaleLayout({
 
   const { locale } = params; 
   const messages = locale === 'th' ? thMessages : enMessages;
+  const tNav = locale === 'th' ? thNav : enNav;
   
   return (
-    // * TAG: [FIX-REQUEST-1] (Smooth Scroll)
-    // * เพิ่ม 'scroll-smooth' เพื่อให้การเลื่อน (hook links) นุ่มนวล
     <html 
       lang={locale} 
       suppressHydrationWarning
-      className="bg-white dark:bg-slate-950 scroll-smooth" 
+      // TAG: [THE-FIX] (2/3) นี่คือจุดที่แก้ Dark Mode ครับ!
+      // ย้าย Gradient Background จาก page.tsx มาไว้ที่ <html>
+      className="
+        bg-gradient-to-br from-slate-50 via-gray-100 to-slate-200 
+        dark:from-slate-900 dark:via-slate-950 dark:to-black 
+        scroll-smooth
+      " 
     > 
       
       <head>
         <ThemeScript />
       </head>
 
-      <body className={`${inter.className} text-slate-900 dark:text-slate-50 transition-colors duration-300`}> 
+      {/* TAG: [THE-FIX] (3/3) นี่คือโครงสร้างที่ถูกต้องตาม Master Plan */}
+      {/* 1. เพิ่ม min-h-screen, flex, flex-col ที่ <body> */}
+      <body className={`
+        ${inter.className} 
+        text-slate-900 dark:text-slate-50 transition-colors duration-300
+        min-h-screen flex flex-col
+      `}> 
         
         <CustomThemeProvider>
           <ClientProviders messages={messages}>
-            <NewNavbar />
-            <main>
+            
+            <NewNavbar tNav={tNav} />
+            
+            {/* 2. เพิ่ม flex-grow ที่ <main> */}
+            <main className="flex-grow">
               {children}
             </main>
+
           </ClientProviders>
         </CustomThemeProvider>
         

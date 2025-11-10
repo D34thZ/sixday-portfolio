@@ -1,27 +1,77 @@
 /* 📍 ที่อยู่ไฟล์: app/globals.css */
 
-/*
-* TAG: [V3-Test]
-* เปลี่ยนกลับไปใช้ V3 Syntax
-*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ... (โค้ด scrollbar ของคุณ) ... */
+/* TAG: [THE-FIX] (1/2) 
+ * 'html' จะควบคุมการ scroll และ overflow ของ "หน้าต่าง" ทั้งหมด 
+ */
+html {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden; /* ป้องกัน scrollbar แนวนอน (เก็บไว้ที่นี่ที่เดียว) */
+  scroll-behavior: smooth; /* เก็บไว้ที่นี่ */
+}
+
+/* TAG: [THE-FIX] (2/2) 
+ * 'body' จะทำหน้าที่เป็นแค่ "Container"
+ * เราลบ overflow-x และ scroll-behavior ออก
+ * ปล่อยให้ Tailwind utilities ใน layout.tsx (เช่น min-h-screen) ควบคุมมันแทน
+ */
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  /* ลบ: overflow-x: hidden; 
+    ลบ: scroll-behavior: smooth;
+    ลบ: min-height: 100vh; (เราลบไปแล้ว)
+  */
+}
+
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* เพิ่ม CSS สำหรับ scroll-snap-align */
+.scroll-snap-start {
+  scroll-snap-align: start;
+}
+
+/* Scrollbar Styles (คงเดิมทั้งหมด) */
+/* สำหรับ Webkit browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #f1f5f9; /* slate-100 */
+  background: #f1f1f1; /* สีพื้นหลังของ track */
+  border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #94a3b8; /* slate-400 */
-  border-radius: 4px;
+  background: #888; /* สีของ thumb */
+  border-radius: 10px;
 }
-html.dark ::-webkit-scrollbar-track {
-  background: #0f172a; /* slate-900 */
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* สีของ thumb เมื่อ hover */
 }
-html.dark ::-webkit-scrollbar-thumb {
-  background: #475569; /* slate-600 */
+
+/* สำหรับ Firefox */
+@supports (scrollbar-color: auto) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+  }
+  *:hover {
+    scrollbar-color: #555 #f1f1f1;
+  }
 }

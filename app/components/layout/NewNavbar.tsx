@@ -15,37 +15,14 @@ const HamburgerButton = ({ isOpen, toggle, color }: { isOpen: boolean, toggle: (
     animate={isOpen ? "open" : "closed"}
     aria-label="Toggle menu"
   >
-    <motion.span
-      style={{ left: '50%', top: '35%', x: '-50%', y: '-50%' }}
-      className="absolute h-0.5 w-6 bg-current"
-      variants={{
-        open: { rotate: 45, top: '50%' },
-        closed: { rotate: 0, top: '35%' }
-      }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
-    />
-    <motion.span
-      style={{ left: '50%', top: '50%', x: '-50%', y: '-50%' }}
-      className="absolute h-0.5 w-6 bg-current"
-      variants={{
-        open: { opacity: 0 },
-        closed: { opacity: 1 }
-      }}
-      transition={{ duration: 0.1 }}
-    />
-    <motion.span
-      style={{ left: '50%', top: '65%', x: '-50%', y: '-50%' }}
-      className="absolute h-0.5 w-6 bg-current"
-      variants={{
-        open: { rotate: -45, top: '50%' },
-        closed: { rotate: 0, top: '65%' }
-      }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
-    />
+    <motion.span style={{ left: '50%', top: '35%', x: '-50%', y: '-50%' }} className="absolute h-0.5 w-6 bg-current" variants={{ open: { rotate: 45, top: '50%' }, closed: { rotate: 0, top: '35%' } }} transition={{ duration: 0.3, ease: 'easeInOut' }} />
+    <motion.span style={{ left: '50%', top: '50%', x: '-50%', y: '-50%' }} className="absolute h-0.5 w-6 bg-current" variants={{ open: { opacity: 0 }, closed: { opacity: 1 } }} transition={{ duration: 0.1 }} />
+    <motion.span style={{ left: '50%', top: '65%', x: '-50%', y: '-50%' }} className="absolute h-0.5 w-6 bg-current" variants={{ open: { rotate: -45, top: '50%' }, closed: { rotate: 0, top: '65%' } }} transition={{ duration: 0.3, ease: 'easeInOut' }} />
   </motion.button>
 );
 
-// (MobileMenuOverlay คงเดิม)
+// * TAG: [i18n-FIX] (5/6)
+// * อัปเดต MobileMenuOverlay ให้รองรับ 2 ภาษา
 const MobileMenuOverlay = ({ items, onClose }: { items: any[], onClose: () => void }) => (
   <motion.div
     className="fixed inset-0 z-40 flex flex-col items-center justify-center space-y-8
@@ -68,15 +45,20 @@ const MobileMenuOverlay = ({ items, onClose }: { items: any[], onClose: () => vo
           className="font-mono text-3xl text-slate-900 transition-colors hover:text-blue-600 font-bold
                      dark:text-slate-50 dark:hover:text-blue-400"
         >
-          &lt;/{item.label}&gt;
+          {/* (เพิ่ม) ถ้าเป็นอังกฤษ ให้แสดง < / ... > */}
+          {item.locale === 'en' ? (
+            <>&lt;/{item.label}&gt;</>
+          ) : (
+            // (เพิ่ม) ถ้าเป็นไทย แสดงแค่ Label
+            <>{item.label}</>
+          )}
         </Link>
       </motion.div>
     ))}
   </motion.div>
 );
 
-// * TAG: [FIX-REQUEST-4] (Language Button Redesign)
-// * เขียน 'LanguageToggle' ใหม่ทั้งหมดเป็นดีไซน์แบบ "Pill"
+// (LanguageToggle คงเดิม - ฉบับแก้ไขล่าสุด)
 const LanguageToggle = () => {
   const params = useParams();
   const pathname = usePathname();
@@ -86,25 +68,31 @@ const LanguageToggle = () => {
     return pathname.replace(`/${currentLocale}`, `/${targetLocale}`);
   };
 
-  // Helper classes
-  const pillClasses = "rounded-full px-3 py-1 transition-all duration-300";
-  const activeClasses = "bg-white dark:bg-slate-700 shadow-sm text-slate-900 dark:text-slate-100";
-  const inactiveClasses = "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100";
+  const spring = { type: "spring", stiffness: 700, damping: 30 };
+
+  const linkClasses = "relative z-10 w-10 text-center rounded-full px-3 py-1 transition-colors duration-200";
+  const activeText = "text-slate-900 dark:text-slate-100";
+  const inactiveText = "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100";
 
   return (
-    // กรอบนอก (วงรีสีเทา)
     <div className="flex items-center gap-1 font-mono font-bold text-sm
-                  bg-slate-200 dark:bg-slate-800 rounded-full p-1"
+                  bg-slate-200 dark:bg-slate-800 rounded-full p-1 relative"
     >
+      <motion.div
+        className="absolute z-0 top-1 w-10 h-[calc(100%-8px)] bg-white dark:bg-slate-700 rounded-full shadow-sm"
+        layout
+        transition={spring} 
+        style={{ left: currentLocale === 'th' ? '4px' : '48px' }}
+      />
       <Link 
         href={getNewPath('th')}
-        className={`${pillClasses} ${currentLocale === 'th' ? activeClasses : inactiveClasses}`}
+        className={`${linkClasses} ${currentLocale === 'th' ? activeText : inactiveText}`}
       >
         TH
       </Link>
       <Link 
         href={getNewPath('en')}
-        className={`${pillClasses} ${currentLocale === 'en' ? activeClasses : inactiveClasses}`}
+        className={`${linkClasses} ${currentLocale === 'en' ? activeText : inactiveText}`}
       >
         EN
       </Link>
@@ -112,62 +100,99 @@ const LanguageToggle = () => {
   );
 };
 
-// (MenuLinks คงเดิม)
+
+// * TAG: [i18n-FIX] (6/6)
+// * "ผ่าตัด" MenuLinks เพื่อรับ 'locale' และแสดงผลแบบมีเงื่อนไข
 const MenuLinks = ({ 
+  locale, // <-- (A) รับ locale
   navItems, 
   textColor, 
   hoveredItem, 
   setHoveredItem 
 }: { 
+  locale: string; // <-- (A) เพิ่ม Type
   navItems: any[], 
   textColor: string, 
   hoveredItem: string | null, 
   setHoveredItem: (id: string | null) => void 
-}) => (
-  <nav
-    className="flex justify-center items-center gap-10"
-    onMouseLeave={() => setHoveredItem(null)}
-  >
-    {navItems.map((item) => {
-      const before = item.label.slice(0, item.splitAt);
-      const after = item.label.slice(item.splitAt);
-      const isHovered = hoveredItem === item.id;
-      const isOtherHovered = hoveredItem !== null && !isHovered;
+}) => {
+  
+  // (B) กำหนดโครงสร้าง Eng labels ไว้ที่นี่
+  const enLabels: { [key: string]: { label: string, splitAt: number } } = {
+    home: { label: "home", splitAt: 3 },
+    expertise: { label: "expertise", splitAt: 8 },
+    work: { label: "work", splitAt: 3 },
+    experience: { label: "experience", splitAt: 9 },
+    contact: { label: "contact", splitAt: 6 }
+  };
 
-      return (
-        <Link
-          key={item.id}
-          href={item.href}
-          onMouseEnter={() => setHoveredItem(item.id)}
-          className={`
-            relative transition-all duration-300 ease-out font-mono tracking-wide font-bold
-            text-[17.6px] 
-            ${textColor}
-            ${isHovered ? 'opacity-100' : ''} 
-            ${isOtherHovered ? 'opacity-50' : ''}
-          `}
-        >
-          &lt;/{before}
-          <span className="relative">
-            <span className={`
-              absolute -top-4 left-1/2 -translate-x-1/2 text-[10px] 
-              transition-opacity duration-300 ease-out
-              ${isHovered ? 'opacity-100' : 'opacity-60'}
-              ${isOtherHovered ? 'opacity-30' : ''}
-            `}>
-              {item.number}
-            </span>
-          </span>
-          {after}&gt;
-        </Link>
-      );
-    })}
-  </nav>
-);
+  return (
+    <nav
+      className="flex justify-center items-center gap-10"
+      onMouseLeave={() => setHoveredItem(null)}
+    >
+      {navItems.map((item) => {
+        const isHovered = hoveredItem === item.id;
+        const isOtherHovered = hoveredItem !== null && !isHovered;
+
+        return (
+          <Link
+            key={item.id}
+            href={item.href}
+            onMouseEnter={() => setHoveredItem(item.id)}
+            className={`
+              relative transition-all duration-300 ease-out font-mono tracking-wide font-bold
+              text-[17.6px] 
+              whitespace-nowrap {/* <-- * TAG: [THE-FIX] เพิ่มบรรทัดนี้ */}
+              ${textColor}
+              ${isHovered ? 'opacity-100' : ''} 
+              ${isOtherHovered ? 'opacity-50' : ''}
+            `}
+          >
+            {/* (C) Conditional Rendering */}
+            {locale === 'en' ? (
+              // === เวอร์ชันอังกฤษ (มี < / >) ===
+              <>
+                &lt;/{enLabels[item.id].label.slice(0, enLabels[item.id].splitAt)}
+                <span className="relative">
+                  <span className={`absolute -top-4 left-1/2 -translate-x-1/2 text-[10px] transition-opacity duration-300 ease-out ${isHovered ? 'opacity-100' : 'opacity-60'} ${isOtherHovered ? 'opacity-30' : ''}`}>
+                    {item.number}
+                  </span>
+                </span>
+                {enLabels[item.id].label.slice(enLabels[item.id].splitAt)}&gt;
+              </>
+            ) : (
+              // === เวอร์ชันไทย (ไม่มี < / >) ===
+              <>
+                {item.label} {/* นี่คือ "หน้าหลัก", "ตัวตน", ฯลฯ */}
+                <span className="relative">
+                  <span className={`absolute -top-4 left-1/2 -translate-x-1/2 text-[10px] transition-opacity duration-300 ease-out ${isHovered ? 'opacity-100' : 'opacity-60'} ${isOtherHovered ? 'opacity-30' : ''}`}>
+                    {item.number}
+                  </span>
+                </span>
+              </>
+            )}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+};
+
 
 // === Component หลัก ===
 
-export function NewNavbar() {
+// * TAG: [i18n-FIX] (Interface สำหรับ tNav)
+interface NavTranslations {
+  home: string;
+  expertise: string;
+  work: string;
+  experience: string;
+  contact: string;
+}
+
+// * TAG: [i18n-FIX] (รับ prop 'tNav')
+export function NewNavbar({ tNav }: { tNav: NavTranslations }) {
   const [scrolled, setScrolled] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -182,13 +207,17 @@ export function NewNavbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []); 
 
+  // * TAG: [i18n-FIX] (สร้าง navItems โดยใช้ tNav)
   const navItems = [
-    { id: 'home', href: `/${locale}#home`, label: 'home', number: '01', splitAt: 3 },
-    { id: 'expertise', href: `/${locale}#expertise`, label: 'expertise', number: '02', splitAt: 8 },
-    { id: 'work', href: `/${locale}#work`, label: 'work', number: '03', splitAt: 3 },
-    { id: 'experience', href: `/${locale}#experience`, label: 'experience', number: '04', splitAt: 9 },
-    { id: 'contact', href: `/${locale}#contact`, label: 'contact', number: '05', splitAt: 6 },
+    { id: 'home', href: `/${locale}#home`, label: tNav.home, number: '01' },
+    { id: 'expertise', href: `/${locale}#expertise`, label: tNav.expertise, number: '02' },
+    { id: 'work', href: `/${locale}#work`, label: tNav.work, number: '03' },
+    { id: 'experience', href: `/${locale}#experience`, label: tNav.experience, number: '04' },
+    { id: 'contact', href: `/${locale}#contact`, label: tNav.contact, number: '05' },
   ];
+
+  // * TAG: [i18n-FIX] (ส่ง locale ไปให้ MobileMenuOverlay)
+  const mobileNavItems = navItems.map(item => ({ ...item, locale: locale }));
 
   return (
     <header 
@@ -206,13 +235,11 @@ export function NewNavbar() {
       
       <div className="relative z-50 pt-6 max-w-7xl mx-auto px-8 h-full grid grid-cols-3 items-center">
         
-        {/* === Slot 1: ซ้าย === */}
+        {/* (Slot 1: ซ้าย คงเดิม) */}
         <div className="justify-self-start">
-          
           <div className="hidden md:block">
             <ThemeToggle />
           </div>
-
           <div className="md:hidden">
             <HamburgerButton 
               isOpen={isMobileMenuOpen}
@@ -225,14 +252,15 @@ export function NewNavbar() {
         {/* === Slot 2: กลาง === */}
         <div className="justify-self-center">
             <div className="hidden md:flex">
+              {/* * TAG: [i18n-FIX] (ส่ง locale={locale}) */}
               <MenuLinks 
+                locale={locale}
                 navItems={navItems}
                 textColor="text-gray-900 dark:text-gray-100" 
                 hoveredItem={hoveredItem}
                 setHoveredItem={setHoveredItem}
               />
             </div>
-
             <div className="md:hidden">
               <AnimatePresence>
                 {!isMobileMenuOpen && (
@@ -248,15 +276,11 @@ export function NewNavbar() {
             </div>
         </div>
 
-        {/* === Slot 3: ขวา === */}
+        {/* (Slot 3: ขวา คงเดิม) */}
         <div className="justify-self-end">
-          {/* * TAG: [FIX-REQUEST-4]
-            * ลบ 'textColor' prop ที่ไม่จำเป็นออก
-          */}
           <div className="hidden md:flex">
             <LanguageToggle />
           </div>
-          
           <div className="md:hidden">
             <AnimatePresence>
               {!isMobileMenuOpen && (
@@ -273,11 +297,12 @@ export function NewNavbar() {
         </div>
       </div>
 
-      {/* (Mobile-Overlay-Layer คงเดิม) */}
+      {/* (Mobile-Overlay-Layer) */}
       <AnimatePresence>
         {isMobileMenuOpen && (
+          // * TAG: [i18n-FIX] (ส่ง mobileNavItems ที่มี locale)
           <MobileMenuOverlay 
-            items={navItems} 
+            items={mobileNavItems} 
             onClose={() => setIsMobileMenuOpen(false)} 
           />
         )}
