@@ -8,6 +8,8 @@ export default function HeroHeader() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
+    // (โค้ด Canvas ทั้งหมดคงเดิม)
+    // ...
     const canvas = canvasRef.current;
     if (!canvas) return;
     
@@ -143,7 +145,9 @@ export default function HeroHeader() {
   };
 
   return (
-    <header className="relative w-full h-[80vh] overflow-hidden">
+    // * TAG: [FIX-REQUEST-2] (2/2)
+    // * เปลี่ยน h-[80vh] เป็น h-screen และเพิ่ม id="home"
+    <header id="home" className="relative w-full h-screen overflow-hidden">
       {/* Animated Canvas Background */}
       <canvas
         ref={canvasRef}
@@ -151,42 +155,37 @@ export default function HeroHeader() {
         className="absolute inset-0 w-full h-full"
       />
             
-      {/* (แก้) Subtle gradient overlay (รวบเป็นบรรทัดเดียว) */}
+      {/* (Overlays และ Shapes คงเดิม) */}
       <div className="absolute inset-0 bg-gradient-to-b from-blue-50/30 via-transparent to-slate-50/40 dark:from-blue-900/10 dark:to-slate-950/30" />
-            
-      {/* (แก้) Geometric shapes (รวบเป็นบรรทัดเดียว) */}
       <div className="absolute top-32 right-32 w-96 h-96 border border-slate-200/40 rotate-45 animate-[spin_25s_linear_infinite] dark:border-slate-800/40" />
       <div className="absolute bottom-24 left-24 w-64 h-64 border border-blue-200/30 rotate-12 animate-[spin_20s_linear_infinite_reverse] dark:border-blue-900/30" />
-            
-      {/* (แก้) Floating orbs (รวบเป็นบรรทัดเดียว) */}
       <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-blue-400/40 rounded-full blur-sm animate-[float_6s_ease-in-out_infinite] dark:bg-blue-300/40" />
       <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-slate-400/30 rounded-full blur-sm animate-[float_8s_ease-in-out_infinite_reverse] dark:bg-slate-600/30" />
             
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center">
-        {/* (แก้) Main heading (รวบเป็นบรรทัดเดียว) */}
+        {/* (Main heading คงเดิม) */}
         <div className="relative mb-6">
           <h1 className="relative text-7xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-br from-slate-900 via-slate-700 to-slate-900 dark:from-slate-100 dark:via-slate-300 dark:to-white tracking-tight">
             SIXDAY
           </h1>
-          {/* (แก้) Subtle glow effect (รวบเป็นบรรทัดเดียว) */}
           <div className="absolute inset-0 text-7xl md:text-8xl lg:text-9xl font-black text-blue-500/5 dark:text-blue-400/10 blur-2xl">
             SIXDAY
           </div>
         </div>
                 
         <div className="space-y-5 max-w-3xl">
-          {/* (แก้) Subheading (รวบเป็นบรรทัดเดียว) */}
+          {/* (Subheading คงเดิม) */}
           <h2 className="text-2xl md:text-4xl font-semibold text-slate-800 dark:text-slate-100 tracking-tight">
             Full-Stack Software Engineer
           </h2>
                     
-          {/* (แก้) Paragraph (รวบเป็นบรรทัดเดียว) */}
+          {/* (Paragraph คงเดิม) */}
           <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 font-light leading-relaxed max-w-2xl mx-auto">
             Architecting scalable solutions with cutting-edge technologies
           </p>
                     
-          {/* (แก้) Tech Stack Pills (รวบเป็นบรรทัดเดียว) */}
+          {/* (Tech Stack Pills คงเดิม) */}
           <div className="flex flex-wrap justify-center gap-3 pt-8">
             {['React', 'Next.js', 'TypeScript', 'Node.js', 'AI/ML'].map((tech, i) => (
               <span
@@ -203,7 +202,7 @@ export default function HeroHeader() {
           </div>
         </div>
         
-        {/* (แก้) CTA Buttons (รวบเป็นบรรทัดเดียว) */}
+        {/* (CTA Buttons คงเดิม) */}
         <div className="mt-14 flex flex-col sm:flex-row gap-4">
           <button className="group relative px-8 py-4 bg-blue-600 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:bg-blue-700 hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/30 dark:shadow-blue-400/20">
             <span className="relative z-10">View Projects</span>
@@ -214,7 +213,7 @@ export default function HeroHeader() {
           </button>
         </div>
 
-        {/* (แก้) Scroll Indicator (รวบเป็นบรรทัดเดียว) */}
+        {/* (Scroll Indicator คงเดิม) */}
         <div className="relative mt-12 mx-auto animate-bounce sm:absolute sm:bottom-12 sm:left-1/2 sm:-translate-x-1/2 sm:mt-0 sm:mx-0">
           <div className="w-6 h-10 border-2 border-slate-300 dark:border-slate-700 rounded-full flex items-start justify-center p-2">
             <div className="w-1 h-3 bg-slate-400 dark:bg-slate-500 rounded-full animate-[scroll_1.5s_ease-in-out_infinite]" />
@@ -224,6 +223,7 @@ export default function HeroHeader() {
       </div>
 
       <style jsx>{`
+        /* (Animations คงเดิม) */
         @keyframes float {
           0%, 100% { 
              transform: translateY(0) translateX(0);

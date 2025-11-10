@@ -1,19 +1,21 @@
 // 📍 ที่อยู่ไฟล์: tailwind.config.js
-// (ฉบับสมบูรณ์และถูกต้อง)
+// (นี่คือ Config ที่ V3 อ่านได้สมบูรณ์)
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // * TAG: [Fix-Dark-Mode-CSS]
-  // * 1. นี่คือบรรทัดที่ "สำคัญที่สุด"
-  // * 2. มันบอก Tailwind ให้มองหา "class='dark'" ที่ <html>
   darkMode: 'class',
   
+  // * TAG: [V3-Test]
+  // * ใช้ content path ที่เจาะจงที่สุด
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    './app/[locale]/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/components/layout/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/components/sections/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/contexts/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/*.{js,ts,jsx,tsx,mdx}',
   ],
+  
   theme: {
     extend: {},
   },

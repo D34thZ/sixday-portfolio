@@ -1,54 +1,56 @@
 // 📍 ที่อยู่ไฟล์: app/[locale]/layout.tsx
-// (ฉบับแก้ไข: เพิ่ม <html>, <body>, และ Inter กลับมาที่นี่)
 
-// TAG: [Imports] (1)
+// (Imports ทั้งหมดเหมือนเดิม)
+import '../globals.css'; 
 import { ClientProviders } from "../ClientProviders";
 import { NewNavbar } from "../components/layout/NewNavbar";
 import thMessages from "../../messages/th.json";
 import enMessages from "../../messages/en.json";
-import { Inter } from 'next/font/google'; // <-- (แก้) ย้าย Inter กลับมาที่นี่
-// (ลบ) globals.css (ย้ายไป root layout แล้ว)
+import { Inter } from 'next/font/google'; 
+import { CustomThemeProvider } from '../contexts/ThemeContext';
+import { ThemeScript } from '../components/ThemeScript';
 
-// (แก้) เพิ่ม metadata กลับมาที่นี่
 export const metadata = {
   title: "sixday.dev",
   description: "Kritsada's Portfolio",
 };
 
-// (แก้) ตั้งค่า Inter ที่นี่
 const inter = Inter({ subsets: ['latin'] });
 
-// TAG: [Fix-Nested-HTML] (2)
 export default async function LocaleLayout({
   children,
   params
 }: {
-  children: React.React.Node;
+  children: React.ReactNode; 
   params: {locale: string};
 }) {
 
   const { locale } = params; 
   const messages = locale === 'th' ? thMessages : enMessages;
-
+  
   return (
-    // * TAG: [Fix-Dark-Mode-Not-Working]
-    // * 1. นี่คือ <html> "หนึ่งเดียว" ของแอป
-    // * 2. เพิ่ม suppressHydrationWarning
-    <html lang={locale} suppressHydrationWarning> 
+    // * TAG: [FIX-REQUEST-1] (Smooth Scroll)
+    // * เพิ่ม 'scroll-smooth' เพื่อให้การเลื่อน (hook links) นุ่มนวล
+    <html 
+      lang={locale} 
+      suppressHydrationWarning
+      className="bg-white dark:bg-slate-950 scroll-smooth" 
+    > 
       
-      {/*
-        * 3. นี่คือ <body> "หนึ่งเดียว" ของแอป
-        * 4. เราใส่ฟอนต์ (inter.className) และสี dark mode ที่นี่
-      */}
-      <body className={`${inter.className} bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300`}> 
+      <head>
+        <ThemeScript />
+      </head>
+
+      <body className={`${inter.className} text-slate-900 dark:text-slate-50 transition-colors duration-300`}> 
         
-        {/* 5. Providers และ Navbar อยู่ข้างใน body */}
-        <ClientProviders messages={messages}>
-          <NewNavbar />
-          <main>
-            {children}
-          </main>
-        </ClientProviders>
+        <CustomThemeProvider>
+          <ClientProviders messages={messages}>
+            <NewNavbar />
+            <main>
+              {children}
+            </main>
+          </ClientProviders>
+        </CustomThemeProvider>
         
       </body>
     </html>

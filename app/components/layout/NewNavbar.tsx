@@ -5,11 +5,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-// (ลบ) Image
-import { ThemeToggle } from './ThemeToggle'; // <-- (เพิ่ม) Import ThemeToggle
+import { ThemeToggle } from './ThemeToggle';
 
-// TAG: [Mobile-Nav] (1)
-// (ส่วน HamburgerButton คงเดิม)
+// (HamburgerButton คงเดิม)
 const HamburgerButton = ({ isOpen, toggle, color }: { isOpen: boolean, toggle: () => void, color: string }) => (
   <motion.button
     onClick={toggle}
@@ -47,11 +45,9 @@ const HamburgerButton = ({ isOpen, toggle, color }: { isOpen: boolean, toggle: (
   </motion.button>
 );
 
-// TAG: [Request 3] (2)
-// (ส่วน MobileMenuOverlay - เพิ่ม Dark Mode)
+// (MobileMenuOverlay คงเดิม)
 const MobileMenuOverlay = ({ items, onClose }: { items: any[], onClose: () => void }) => (
   <motion.div
-    // (แก้) เพิ่ม Dark Mode ให้กับเมนู Overlay
     className="fixed inset-0 z-40 flex flex-col items-center justify-center space-y-8
                bg-white dark:bg-slate-950" 
     initial={{ x: '-100%' }}
@@ -69,7 +65,6 @@ const MobileMenuOverlay = ({ items, onClose }: { items: any[], onClose: () => vo
         <Link
           href={item.href}
           onClick={onClose} 
-          // (แก้) เพิ่ม Dark Mode ให้กับ Link
           className="font-mono text-3xl text-slate-900 transition-colors hover:text-blue-600 font-bold
                      dark:text-slate-50 dark:hover:text-blue-400"
         >
@@ -80,9 +75,9 @@ const MobileMenuOverlay = ({ items, onClose }: { items: any[], onClose: () => vo
   </motion.div>
 );
 
-// TAG: [Request 1] (3)
-// (ส่วน LanguageToggle คงเดิม)
-const LanguageToggle = ({ textColor }: { textColor: string }) => {
+// * TAG: [FIX-REQUEST-4] (Language Button Redesign)
+// * เขียน 'LanguageToggle' ใหม่ทั้งหมดเป็นดีไซน์แบบ "Pill"
+const LanguageToggle = () => {
   const params = useParams();
   const pathname = usePathname();
   const currentLocale = params.locale as string;
@@ -91,18 +86,25 @@ const LanguageToggle = ({ textColor }: { textColor: string }) => {
     return pathname.replace(`/${currentLocale}`, `/${targetLocale}`);
   };
 
+  // Helper classes
+  const pillClasses = "rounded-full px-3 py-1 transition-all duration-300";
+  const activeClasses = "bg-white dark:bg-slate-700 shadow-sm text-slate-900 dark:text-slate-100";
+  const inactiveClasses = "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100";
+
   return (
-    <div className={`flex items-center gap-1 font-mono font-bold text-[17.6px] ${textColor}`}>
+    // กรอบนอก (วงรีสีเทา)
+    <div className="flex items-center gap-1 font-mono font-bold text-sm
+                  bg-slate-200 dark:bg-slate-800 rounded-full p-1"
+    >
       <Link 
         href={getNewPath('th')}
-        className={currentLocale === 'th' ? 'opacity-100' : 'opacity-50 hover:opacity-100'}
+        className={`${pillClasses} ${currentLocale === 'th' ? activeClasses : inactiveClasses}`}
       >
         TH
       </Link>
-      <span className="opacity-30">/</span>
       <Link 
         href={getNewPath('en')}
-        className={currentLocale === 'en' ? 'opacity-100' : 'opacity-50 hover:opacity-100'}
+        className={`${pillClasses} ${currentLocale === 'en' ? activeClasses : inactiveClasses}`}
       >
         EN
       </Link>
@@ -110,11 +112,7 @@ const LanguageToggle = ({ textColor }: { textColor: string }) => {
   );
 };
 
-// * TAG: [Refactor-Logo-Removal] (1)
-// * (ลบ) Component "Logo" ทั้งหมด
-
-// * TAG: [Refactor-Flicker-Bug] (2)
-// * (ส่วน MenuLinks คงเดิม)
+// (MenuLinks คงเดิม)
 const MenuLinks = ({ 
   navItems, 
   textColor, 
@@ -177,18 +175,13 @@ export function NewNavbar() {
   const locale = params.locale as string; 
 
   useEffect(() => {
-    // * TAG: [Debug-Mount]
-    // * เพิ่ม 'console.log' เพื่อเช็คว่า Navbar 'mount' สำเร็จหรือไม่
-    console.log("✅ [Debug] NewNavbar Mounted (Scroll Effect)");
-
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []); // <-- 'useEffect' นี้มีอยู่แล้ว
+  }, []); 
 
-  // (แก้) ต้องกำหนด locale ให้ navItems (ถ้ายังไม่ถูกกำหนด)
   const navItems = [
     { id: 'home', href: `/${locale}#home`, label: 'home', number: '01', splitAt: 3 },
     { id: 'expertise', href: `/${locale}#expertise`, label: 'expertise', number: '02', splitAt: 8 },
@@ -197,44 +190,33 @@ export function NewNavbar() {
     { id: 'contact', href: `/${locale}#contact`, label: 'contact', number: '05', splitAt: 6 },
   ];
 
-  // TAG: [Render]
   return (
     <header 
       className="fixed top-0 left-0 right-0 z-50 h-24"
     >
       
-      {/* * TAG: [Background]
-        * (แก้) เพิ่ม Dark Mode ให้กับพื้นหลัง
-      */}
+      {/* (Background motion.div คงเดิม) */}
       <motion.div
         className="absolute inset-0 bg-white/90 backdrop-blur-md shadow-lg shadow-black/5
-                   dark:bg-slate-950/90" // <-- (แก้)
+                   dark:bg-slate-950/90"
         initial={{ opacity: 0 }}
         animate={{ opacity: scrolled ? 1 : 0 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
       />
       
-      {/* * TAG: [UI-Layer] */}
       <div className="relative z-50 pt-6 max-w-7xl mx-auto px-8 h-full grid grid-cols-3 items-center">
         
         {/* === Slot 1: ซ้าย === */}
         <div className="justify-self-start">
           
-          {/* * TAG: [Theme-Toggle-Desktop]
-            * (แก้) แสดง ThemeToggle ที่นี่สำหรับ Tablet (md) และ Desktop (lg)
-          */}
           <div className="hidden md:block">
             <ThemeToggle />
           </div>
 
-          {/* * TAG: [Theme-Toggle-Mobile-Hamburger]
-            * (แก้) แสดง Hamburger ที่นี่สำหรับ Mobile (< md)
-          */}
           <div className="md:hidden">
             <HamburgerButton 
               isOpen={isMobileMenuOpen}
               toggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              // (แก้) เพิ่มสีสำหรับ Dark Mode
               color="text-gray-900 dark:text-gray-100" 
             />
           </div>
@@ -242,21 +224,15 @@ export function NewNavbar() {
 
         {/* === Slot 2: กลาง === */}
         <div className="justify-self-center">
-            {/* Desktop/Tablet: แสดงเมนู */}
             <div className="hidden md:flex">
               <MenuLinks 
                 navItems={navItems}
-                // (แก้) เพิ่มสีสำหรับ Dark Mode
                 textColor="text-gray-900 dark:text-gray-100" 
                 hoveredItem={hoveredItem}
                 setHoveredItem={setHoveredItem}
               />
             </div>
 
-            {/* * TAG: [Theme-Toggle-Mobile-Center]
-              * (แก้) แสดง ThemeToggle ที่นี่สำหรับ Mobile (< md)
-              * และต้อง หายไป (exit) เมื่อ isMobileMenuOpen == true
-            */}
             <div className="md:hidden">
               <AnimatePresence>
                 {!isMobileMenuOpen && (
@@ -274,12 +250,13 @@ export function NewNavbar() {
 
         {/* === Slot 3: ขวา === */}
         <div className="justify-self-end">
-          {/* (แก้) เพิ่มสีสำหรับ Dark Mode */}
+          {/* * TAG: [FIX-REQUEST-4]
+            * ลบ 'textColor' prop ที่ไม่จำเป็นออก
+          */}
           <div className="hidden md:flex">
-            <LanguageToggle textColor="text-gray-900 dark:text-gray-100" />
+            <LanguageToggle />
           </div>
           
-          {/* (แก้) เพิ่มสีสำหรับ Dark Mode */}
           <div className="md:hidden">
             <AnimatePresence>
               {!isMobileMenuOpen && (
@@ -288,7 +265,7 @@ export function NewNavbar() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.15, ease: 'easeOut' }}
                 >
-                  <LanguageToggle textColor="text-gray-900 dark:text-gray-100" />
+                  <LanguageToggle />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -296,7 +273,7 @@ export function NewNavbar() {
         </div>
       </div>
 
-      {/* * TAG: [Mobile-Overlay-Layer] */}
+      {/* (Mobile-Overlay-Layer คงเดิม) */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <MobileMenuOverlay 

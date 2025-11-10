@@ -1,54 +1,63 @@
 // 📍 ที่อยู่ไฟล์: app/components/layout/ThemeToggle.tsx
 'use client';
 
-import { useTheme } from 'next-themes';
+// * TAG: [FIX-REQUEST-3] (Apple Switch)
+// * เขียนใหม่ทั้งหมดเพื่อสร้างสวิตช์สไตล์ Apple
+
+import { useCustomTheme } from '../../contexts/ThemeContext';
+import { motion } from 'framer-motion';
 import { Sun, Moon } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import React from 'react';
 
 export function ThemeToggle() {
-  const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  
+  const { theme, setTheme, resolvedTheme } = useCustomTheme();
+  const [mounted, setMounted] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setMounted(true);
-    // * TAG: [Debug] (แก้)
-    // * เพิ่ม Log เพื่อดูว่า Toggle 'mount' หรือไม่
-    console.log('🎨 [Debug] ThemeToggle Mounted, current theme:', theme);
-  }, [theme]); // <-- (แก้) ให้ log ใหม่เมื่อ theme เปลี่ยน
+  }, []);
 
   if (!mounted) {
-    // (แก้) ใช้ placeholder แบบที่ Claude แนะนำ
-    return (
-      <div className="h-10 w-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-    );
+    // Placeholder เพื่อจองพื้นที่ ป้องกัน Layout กระตุก
+    return <div className="w-14 h-8" />; 
   }
+  
+  const isDarkMode = resolvedTheme === 'dark';
 
   const toggleTheme = () => {
-    // * TAG: [Debug] (แก้)
-    console.log('🔄 [Debug] Toggle clicked, changing from:', theme);
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(isDarkMode ? 'light' : 'dark');
+  };
+
+  // Animation แบบ Spring
+  const spring = {
+    type: "spring",
+    stiffness: 700,
+    damping: 30
   };
 
   return (
-    // (แก้) ใช้สไตล์ใหม่ของ Claude เพื่อให้เห็นชัดเจน
-    <button
+    <div 
+      className={`
+        w-14 h-8 p-1 flex items-center rounded-full cursor-pointer
+        relative transition-colors duration-300
+        ${isDarkMode ? 'bg-green-500' : 'bg-slate-200 dark:bg-slate-700'}
+      `}
       onClick={toggleTheme}
-      className="relative h-10 w-10 rounded-lg border-2 border-gray-300 dark:border-gray-600
-                 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700
-                 transition-all duration-200 flex items-center justify-center"
       aria-label="Toggle theme"
-      type="button"
     >
-      <span className="sr-only">{theme === 'light' ? 'Light' : 'Dark'} mode</span>
-      
-      <Sun
-        className={`absolute h-5 w-5 text-yellow-500 transform transition-all duration-300
-                    ${theme === 'light' ? 'rotate-0 scale-100 opacity-100' : 'rotate-90 scale-0 opacity-0'}`}
+      {/* ไอคอนจะถูกวางแบบ Absolute ซ้อนกัน */}
+      <Sun className="w-4 h-4 absolute left-[7px] text-yellow-500 z-10" />
+      <Moon className="w-4 h-4 absolute right-[7px] text-slate-100 z-10" />
+
+      {/* วงกลมที่เลื่อนได้ */}
+      <motion.div
+        className="w-6 h-6 bg-white rounded-full shadow-md z-20"
+        layout // <-- Framer Motion จะ animate การเปลี่ยนแปลง layout
+        transition={spring}
+        // ถ้าเป็น Dark Mode ให้ margin-left เป็น auto (เลื่อนไปขวา)
+        style={{ marginLeft: isDarkMode ? 'auto' : '0px' }} 
       />
-      <Moon
-        className={`absolute h-5 w-5 text-blue-400 transform transition-all duration-300
-                    ${theme === 'dark' ? 'rotate-0 scale-100 opacity-100' : 'rotate-90 scale-0 opacity-0'}`}
-      />
-    </button>
+    </div>
   );
 }

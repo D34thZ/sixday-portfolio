@@ -1,30 +1,22 @@
 // 📍 ที่อยู่ไฟล์: app/ClientProviders.tsx
 'use client'; 
 
-// (เพิ่ม) Import 'useEffect'
-import { useEffect } from 'react'; 
+// (ลบ useEffect และ ThemeProvider ทิ้ง)
 import { TranslationsProvider } from "./context/i18n.context";
-import { ThemeProvider } from "./ThemeProvider";
 
 export function ClientProviders({ 
   children, 
   messages 
 }: { 
-  children: React.React.Node; 
+  children: React.ReactNode; 
   messages: any; 
 }) {
 
-  // * TAG: [Debug-Mount]
-  // * เพิ่ม 'useEffect' เพื่อเช็คว่า Component นี้ 'mount' สำเร็จหรือไม่
-  useEffect(() => {
-    console.log("✅ [Debug] ClientProviders Mounted");
-  }, []);
-
+  // * TAG: [Refactor-Cookie]
+  // * ลบ <ThemeProvider> ที่ห่ออยู่ออกไป
   return (
-    <ThemeProvider>
-      <TranslationsProvider messages={messages}>
-        {children}
-      </TranslationsProvider>
-    </ThemeProvider>
+    <TranslationsProvider messages={messages}>
+      {children}
+    </TranslationsProvider>
   );
 }
