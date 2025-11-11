@@ -126,7 +126,7 @@ const enContent = {
     ]
   },
   contact: {
-    name: "Chris",
+    name: "Park",
     title: "My focus is on the next challenge.",
     body: "Have a complex problem that needs a creative and strategic solution? Let's start the conversation.",
     connectTitle: "Let's Connect",
@@ -233,7 +233,7 @@ const thContent = {
     ]
   },
   contact: {
-    name: "Chris",
+    name: "ปาร์ค",
     title: "ผมโฟกัสที่ \"ความท้าทาย\" ครั้งต่อไป",
     body: "มีปัญหาที่ซับซ้อนที่ต้องการโซลูชันที่ \"สร้างสรรค์\" และ \"มีกลยุทธ์\" ไหมครับ? มาเริ่มต้นบทสนทนากัน",
     connectTitle: "ติดต่อ",
