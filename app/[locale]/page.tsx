@@ -89,39 +89,39 @@ const enContent = {
     items: [
       {
         title: "Lead Creative Technologist",
-        years: "2022 - Present",
-        location: "Bangkok, Thailand",
-        domain: "creative-tech-group.com",
+        years: "2025 - Present",
+        location: "Udon thani, Thailand",
+        domain: "udautoglass.com",
         description: "Leading the development of high-impact web applications, bridging the gap between complex engineering and pixel-perfect design.",
-        tech: ["Next.js", "TypeScript", "Framer Motion", "Vercel", "Node.js"],
-        logoUrl: "https://placehold.co/100x100/1E40AF/FFFFFF?text=CTG"
+        tech: ["Next.js", "Node.js", "Vercel", "PostgreSQL", "Firebase"],
+        logoUrl: "images/test_logo_udg.png"
       },
       {
         title: "Senior Full-Stack Developer",
-        years: "2020 - 2022",
-        location: "Chiang Mai, Thailand (Remote)",
-        domain: "saas-solutions.dev",
+        years: "2024 - Present",
+        location: "Udon thani, Thailand",
+        domain: "uda.co.th",
         description: "Architected and built scalable SaaS platforms using React and Python (Django). Focused on performance optimization and database management.",
-        tech: ["React", "Python", "Django", "PostgreSQL", "AWS"],
-        logoUrl: "https://placehold.co/100x100/047857/FFFFFF?text=SaaS"
+        tech: ["React", "WordPress", "MySQL", "PHP", "JavaScript"],
+        logoUrl: "images/test_logo_uda.png"
       },
       {
         title: "UI/UX Designer & Frontend Dev",
-        years: "2018 - 2020",
-        location: "Freelance",
-        domain: "design-by-me.com",
+        years: "2023 - Present",
+        location: "Udon thani, Thailand",
+        domain: "zealprotech.com",
         description: "Worked directly with clients to design brand identities, user interfaces (UI/UX), and develop custom websites (WordPress, Webflow).",
-        tech: ["Figma", "Adobe XD", "WordPress", "Webflow", "CSS"],
-        logoUrl: "https://placehold.co/100x100/BE185D/FFFFFF?text=Me"
+        tech: ["Figma", "WordPress", "HTML", "CSS", "JavaScript"],
+        logoUrl: "images/logo_tbi.jpg"
       },
       {
         title: "Junior Graphic Designer",
-        years: "2015 - 2018",
-        location: "Khon Kaen, Thailand",
-        domain: "local-print-shop.th",
+        years: "2019 - 2022",
+        location: "Udon thani, Thailand",
+        domain: "romaclinic.co",
         description: "Started my career in design, focusing on print media, branding, and marketing materials for local businesses.",
-        tech: ["Photoshop", "Illustrator", "InDesign"],
-        logoUrl: "https://placehold.co/100x100/9A3412/FFFFFF?text=Print"
+        tech: ["Photoshop", "Illustrator", "Premiere Pro", "After Effects"],
+        logoUrl: "images/logo-roma.png"
       }
     ]
   },
@@ -130,17 +130,17 @@ const enContent = {
     title: "My focus is on the next challenge.",
     body: "Have a complex problem that needs a creative and strategic solution? Let's start the conversation.",
     connectTitle: "Let's Connect",
-    email: "contact@sixday.dev",
+    email: "kk.papark@gmail.com",
     phoneDisplay: "080-060-6884", 
     phoneRaw: "+66800606884", 
     socialTitle: "Find me online",
     links: {
-      github: "#", 
-      facebook: "#",
-      instagram: "#",
-      tiktok: "#",
-      line: "#",
-      whatsapp: "#"
+      github: "https://github.com/6day-dev", 
+      facebook: "https://www.facebook.com/k.khunon",
+      instagram: "https://www.instagram.com/krishkhunon",
+      tiktok: "https://www.tiktok.com/@chrisparker6969",
+      line: "https://line.me/ti/p/whgj96JBlW",
+      whatsapp: "https://wa.me/66800606884"
     }
   }
 };
@@ -196,39 +196,39 @@ const thContent = {
     items: [
       {
         title: "หัวหน้าทีม Creative Technologist",
-        years: "2022 - ปัจจุบัน",
-        location: "กรุงเทพมหานคร, ประเทศไทย",
-        domain: "creative-tech-group.com",
+        years: "2025 - ปัจจุบัน",
+        location: "อุดรธานี, ประเทศไทย",
+        domain: "udautoglass.com",
         description: "นำทีมพัฒนาเว็บแอปพลิเคชันที่มีผลกระทบสูง เชื่อมช่องว่างระหว่างวิศวกรรมที่ซับซ้อนและการออกแบบที่สมบูรณ์แบบทุกพิกเซล",
-        tech: ["Next.js", "TypeScript", "Framer Motion", "Vercel", "Node.js"],
-        logoUrl: "https://placehold.co/100x100/1E40AF/FFFFFF?text=CTG"
+        tech: ["Next.js", "Node.js", "Vercel", "PostgreSQL", "Firebase"],
+        logoUrl: "images/test_logo_udg.png"
       },
       {
         title: "นักพัฒนา Full-Stack อาวุโส",
-        years: "2020 - 2022",
-        location: "เชียงใหม่, ประเทศไทย (Remote)",
-        domain: "saas-solutions.dev",
+        years: "2024 - ปัจจุบัน",
+        location: "อุดรธานี, ประเทศไทย",
+        domain: "uda.co.th",
         description: "ออกแบบสถาปัตยกรรมและสร้างแพลตฟอร์ม SaaS ที่ขยายตัวได้ โดยใช้ React และ Python (Django) เน้นการเพิ่มประสิทธิภาพและการจัดการฐานข้อมูล",
-        tech: ["React", "Python", "Django", "PostgreSQL", "AWS"],
-        logoUrl: "https://placehold.co/100x100/047857/FFFFFF?text=SaaS"
+        tech: ["React", "WordPress", "MySQL", "PHP", "JavaScript"],
+        logoUrl: "images/test_logo_uda.png"
       },
       {
         title: "นักออกแบบ UI/UX & นักพัฒนา Frontend",
-        years: "2018 - 2020",
-        location: "ฟรีแลนซ์",
-        domain: "design-by-me.com",
+        years: "2023 - ปัจจุบัน",
+        location: "อุดรธานี, ประเทศไทย",
+        domain: "zealprotech.com",
         description: "ทำงานร่วมกับลูกค้าโดยตรงเพื่อออกแบบอัตลักษณ์แบรนด์, User Interfaces (UI/UX), และพัฒนาเว็บไซต์ (WordPress, Webflow)",
-        tech: ["Figma", "Adobe XD", "WordPress", "Webflow", "CSS"],
-        logoUrl: "https://placehold.co/100x100/BE185D/FFFFFF?text=Me"
+        tech: ["Figma", "WordPress", "HTML", "CSS", "JavaScript"],
+        logoUrl: "images/logo_tbi.jpg"
       },
       {
         title: "นักออกแบบกราฟิก (Junior)",
-        years: "2015 - 2018",
-        location: "ขอนแก่น, ประเทศไทย",
-        domain: "local-print-shop.th",
+        years: "2019 - 2022",
+        location: "อุดรธานี, ประเทศไทย",
+        domain: "romaclinic.co",
         description: "เริ่มต้นอาชีพด้านการออกแบบ โดยเน้นที่สื่อสิ่งพิมพ์, การสร้างแบรนด์, และสื่อการตลาดสำหรับธุรกิจในท้องถิ่น",
-        tech: ["Photoshop", "Illustrator", "InDesign"],
-        logoUrl: "https://placehold.co/100x100/9A3412/FFFFFF?text=Print"
+        tech: ["Photoshop", "Illustrator", "Premiere Pro", "After Effects"],
+        logoUrl: "images/logo-roma.png"
       }
     ]
   },
@@ -237,17 +237,17 @@ const thContent = {
     title: "ผมโฟกัสที่ \"ความท้าทาย\" ครั้งต่อไป",
     body: "มีปัญหาที่ซับซ้อนที่ต้องการโซลูชันที่ \"สร้างสรรค์\" และ \"มีกลยุทธ์\" ไหมครับ? มาเริ่มต้นบทสนทนากัน",
     connectTitle: "ติดต่อ",
-    email: "contact@sixday.dev",
+    email: "kk.papark@gmail.com",
     phoneDisplay: "080-060-6884", 
     phoneRaw: "+66800606884", 
     socialTitle: "ช่องทางติดตาม",
     links: {
-      github: "#", 
-      facebook: "#",
-      instagram: "#",
-      tiktok: "#",
-      line: "#",
-      whatsapp: "#"
+      github: "https://github.com/6day-dev", 
+      facebook: "https://www.facebook.com/k.khunon",
+      instagram: "https://www.instagram.com/krishkhunon/",
+      tiktok: "https://www.tiktok.com/@chrisparker6969",
+      line: "https://line.me/ti/p/whgj96JBlW",
+      whatsapp: "https://wa.me/66800606884"
     }
   }
 };

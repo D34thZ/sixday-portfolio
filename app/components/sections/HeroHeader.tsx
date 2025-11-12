@@ -167,14 +167,20 @@ export default function HeroHeader({ t }: HeroHeaderProps) {
         <div className="mt-14 flex flex-col sm:flex-row gap-4">
           
           {/* * TAG: [i18n-FIX] (4A/6) */}
-          <button className="group relative px-8 py-4 bg-blue-600 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:bg-blue-700 hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/30 dark:shadow-blue-400/20">
+          <a 
+            href="#work" 
+            className="group relative px-8 py-4 bg-blue-600 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:bg-blue-700 hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/30 dark:shadow-blue-400/20"
+          >
             <span className="relative z-10">{t.buttons.projects}</span>
-          </button>
+          </a>
           
           {/* * TAG: [i18n-FIX] (4B/6) */}
-          <button className="px-8 py-4 bg-white border border-slate-200 rounded-xl font-semibold text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:shadow-lg dark:hover:bg-slate-700 dark:hover:border-slate-600 dark:hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+          <a 
+            href="#contact" 
+            className="px-8 py-4 bg-white border border-slate-200 rounded-xl font-semibold text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:shadow-lg dark:hover:bg-slate-700 dark:hover:border-slate-600 dark:hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+          >
             {t.buttons.contact}
-          </button>
+          </a>
         </div>
         <div className="relative mt-12 mx-auto animate-bounce sm:absolute sm:bottom-12 sm:left-1/2 sm:-translate-x-1-2 sm:mt-0 sm:mx-0">
           <div className="w-6 h-10 border-2 border-slate-300 dark:border-slate-700 rounded-full flex items-start justify-center p-2">
