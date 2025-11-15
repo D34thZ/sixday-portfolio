@@ -2,8 +2,15 @@
 
 import React, { createContext, useContext, ReactNode, useState } from 'react';
 
+// TAG: [THE-FIX] (1/1) อัปเกรด Type 'Messages'
+// - เปลี่ยนจาก 'any' เป็น Type ที่รองรับการซ้อนกัน (Recursive Type)
+// - 'export' Type นี้ เพื่อให้ ClientProviders.tsx ใช้งานได้
+export type Messages = {
+  [key: string]: string | Messages;
+};
+
 // TAG: [Types] (คงเดิม)
-type Messages = Record<string, any>;
+// type Messages = Record<string, any>; // <-- ลบบรรทัดนี้
 
 // TAG: [Fix-8.0] (1) อัปเกรด Type ของ Context
 // เราจะเก็บ "ทั้ง" messages และ "ฟังก์ชันอัปเดต" (setter)
@@ -21,7 +28,7 @@ export function TranslationsProvider({
   messages: initialMessages // (เปลี่ยนชื่อเป็น initialMessages)
 }: {
   children: ReactNode;
-  messages: Messages;
+  messages: Messages; // <-- ใช้ Type ใหม่
 }) {
   // TAG: [Fix-8.0] (4) ใช้ 'useState'
   // เพื่อให้ 'messages' สามารถ "เปลี่ยนแปลง" ได้บน Client
@@ -56,16 +63,27 @@ export function useI18n() {
     }
 
     const keys = key.split('.');
-    let result = messages;
+    let result: string | Messages = messages; // <-- ใช้ Type ที่ถูกต้อง
     
     for (const k of keys) {
-      result = result[k];
+      // ตรวจสอบว่า result เป็น object ก่อนที่จะเข้าถึง key
+      if (typeof result !== 'object' || result === null || Array.isArray(result)) {
+        console.warn(`Translation key "${key}" not found (invalid path).`);
+        return key;
+      }
+      result = (result as Messages)[k]; // <-- Cast 
       if (!result) {
         console.warn(`Translation key "${key}" not found.`);
         return key; 
       }
     }
     
+    // ตรวจสอบว่าผลลัพธ์สุดท้ายเป็น string
+    if (typeof result !== 'string') {
+      console.warn(`Translation key "${key}" resolved to an object, not a string.`);
+      return key;
+    }
+
     return result;
   };
 

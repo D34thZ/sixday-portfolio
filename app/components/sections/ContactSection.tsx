@@ -56,8 +56,28 @@ const iconHover = {
 // TAG: ContactSection Component
 // --------------------------------------------------------------------------------
 
+// TAG: [THE-FIX] (1/1) สร้าง Type ที่แม่นยำสำหรับ 't' (t.contact)
+interface ContactTranslations {
+  name: string;
+  title: string;
+  body: string;
+  connectTitle: string;
+  email: string;
+  phoneDisplay: string;
+  phoneRaw: string;
+  socialTitle: string;
+  links: {
+    github: string;
+    facebook: string;
+    instagram: string;
+    tiktok: string;
+    line: string;
+    whatsapp: string;
+  };
+}
+
 interface ContactSectionProps {
-  t: any; // รับ t (translation object) ทั้งก้อน (t.contact)
+  t: ContactTranslations; // <-- เปลี่ยนจาก 'any'
 }
 
 const ContactSection: React.FC<ContactSectionProps> = ({ t }) => {

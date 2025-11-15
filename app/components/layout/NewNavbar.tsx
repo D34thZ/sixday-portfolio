@@ -21,9 +21,19 @@ const HamburgerButton = ({ isOpen, toggle, color }: { isOpen: boolean, toggle: (
   </motion.button>
 );
 
+// TAG: [THE-FIX] (1/6) สร้าง Type สำหรับ Mobile Nav Item
+interface MobileNavItem {
+  id: string;
+  href: string;
+  label: string;
+  number: string;
+  locale: string;
+}
+
 // * TAG: [i18n-FIX] (5/6)
 // * อัปเดต MobileMenuOverlay ให้รองรับ 2 ภาษา
-const MobileMenuOverlay = ({ items, onClose }: { items: any[], onClose: () => void }) => (
+// TAG: [THE-FIX] (2/6) ใช้ Type 'MobileNavItem[]' แทน 'any[]'
+const MobileMenuOverlay = ({ items, onClose }: { items: MobileNavItem[], onClose: () => void }) => (
   <motion.div
     className="fixed inset-0 z-40 flex flex-col items-center justify-center space-y-8
                bg-white dark:bg-slate-950" 
@@ -100,6 +110,13 @@ const LanguageToggle = () => {
   );
 };
 
+// TAG: [THE-FIX] (3/6) สร้าง Type สำหรับ Base Nav Item
+interface BaseNavItem {
+  id: string;
+  href: string;
+  label: string;
+  number: string;
+}
 
 // * TAG: [i18n-FIX] (6/6)
 // * "ผ่าตัด" MenuLinks เพื่อรับ 'locale' และแสดงผลแบบมีเงื่อนไข
@@ -111,7 +128,8 @@ const MenuLinks = ({
   setHoveredItem 
 }: { 
   locale: string; // <-- (A) เพิ่ม Type
-  navItems: any[], 
+  // TAG: [THE-FIX] (4/6) ใช้ Type 'BaseNavItem[]' แทน 'any[]'
+  navItems: BaseNavItem[], 
   textColor: string, 
   hoveredItem: string | null, 
   setHoveredItem: (id: string | null) => void 
@@ -208,7 +226,8 @@ export function NewNavbar({ tNav }: { tNav: NavTranslations }) {
   }, []); 
 
   // * TAG: [i18n-FIX] (สร้าง navItems โดยใช้ tNav)
-  const navItems = [
+  // TAG: [THE-FIX] (5/6) กำหนด Type ให้ 'navItems'
+  const navItems: BaseNavItem[] = [
     { id: 'home', href: `/${locale}#home`, label: tNav.home, number: '01' },
     { id: 'expertise', href: `/${locale}#expertise`, label: tNav.expertise, number: '02' },
     { id: 'work', href: `/${locale}#work`, label: tNav.work, number: '03' },
@@ -217,7 +236,8 @@ export function NewNavbar({ tNav }: { tNav: NavTranslations }) {
   ];
 
   // * TAG: [i18n-FIX] (ส่ง locale ไปให้ MobileMenuOverlay)
-  const mobileNavItems = navItems.map(item => ({ ...item, locale: locale }));
+  // TAG: [THE-FIX] (6/6) กำหนด Type ให้ 'mobileNavItems'
+  const mobileNavItems: MobileNavItem[] = navItems.map(item => ({ ...item, locale: locale }));
 
   return (
     <header 

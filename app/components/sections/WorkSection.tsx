@@ -103,15 +103,35 @@ const mockProjects = [
 ];
 // --------------------------------------------------------------------------------
 
+// TAG: [THE-FIX] (1/2) สร้าง Type ที่แม่นยำสำหรับ 't' (t.work)
+interface WorkTranslations {
+  title: string;
+  description: string;
+  filters: {
+    all: string;
+    fullStack: string;
+    uiUx: string;
+    data: string;
+  };
+  card: {
+    showProject: string;
+    categories: {
+      fullStack: string;
+      uiUx: string;
+      data: string;
+    };
+  };
+}
 
 // (Interface และ filterCategories คงเดิม)
 interface WorkSectionProps {
-  t: any;
-  locale: string;
+  t: WorkTranslations; // <-- เปลี่ยนจาก 'any'
+  // locale: string; // <-- 'locale' ถูกลบออก เพราะ Vercel แจ้งว่าไม่ได้ใช้
 }
 const filterCategories = ["all", "fullStack", "uiUx", "data"];
 
-const WorkSection: React.FC<WorkSectionProps> = ({ t, locale }) => {
+// TAG: [THE-FIX] (2/2) ลบ 'locale' ออกจาก props (เพราะ Vercel แจ้งว่าไม่ได้ใช้)
+const WorkSection: React.FC<WorkSectionProps> = ({ t }) => {
   // (State และ Logic การ Filter คงเดิม)
   const [activeFilter, setActiveFilter] = useState("all");
 

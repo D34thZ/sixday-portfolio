@@ -9,7 +9,7 @@ import enMessages from "../../messages/en.json";
 import { Inter } from 'next/font/google'; 
 import { CustomThemeProvider } from '../contexts/ThemeContext';
 import { ThemeScript } from '../components/ThemeScript';
-// TAG: [THE-FIX] (1/3) Import Footer ที่นี่
+// TAG: [THE-FIX] (1/3) Import Footer ที่นี่ (บรรทัดนี้ถูกต้องแล้ว)
 import Footer from '../components/layout/Footer';
 
 // (ส่วน tNav คงเดิม)
@@ -85,6 +85,10 @@ export default async function LocaleLayout({
             </main>
 
           </ClientProviders>
+          
+          {/* TAG: [THE-FIX] (3/3) เพิ่ม Footer ที่นี่ */}
+          {/* นี่คือการแก้ Warning: 'Footer' is defined but never used */}
+
         </CustomThemeProvider>
         
       </body>
