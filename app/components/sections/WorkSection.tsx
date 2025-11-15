@@ -1,109 +1,66 @@
 "use client";
 
-// TAG: [Component] WorkSection
-// นี่คือ Component หลักสำหรับส่วน "Work"
-// เราใช้ "use client" เพราะต้องใช้ useState สำหรับการ Filter
+// 📍 ที่อยู่ไฟล์: app/components/sections/WorkSection.tsx
 
-// TAG: [THE-FIX] (1/4) Import 'useState' และ 'useEffect'
 import React, { useState, useEffect } from "react";
-import ProjectCard from "../work/ProjectCard";
 
-// TAG: [THE-FIX] (2/4) Import Spline แบบ Default (ไม่มีวงเล็บปีกกา)
-// 📍 นี่คือบรรทัดที่แก้ไข 📍
-// เราเปลี่ยนจาก { Spline } เป็น Spline (Default Import)
+// TAG: [THE-FIX] (1/3) 📍📍📍 นี่คือจุดที่แก้ไข (จุดที่ 1) 📍📍📍
+// Import 'ProjectCard' (Default) และ 'Project' (Type)
+import ProjectCard, { type Project } from "../work/ProjectCard"; 
 import Spline from "@splinetool/react-spline";
 
-// (Mock Data ทั้งหมดคงเดิม... ผมย่อไว้เพื่อความกระชับ)
 // --------------------------------------------------------------------------------
 // TAG: Mock Data
 // --------------------------------------------------------------------------------
-const mockProjects = [
+
+// TAG: [THE-FIX] (2/3) 📍📍📍 นี่คือจุดที่แก้ไข (จุดที่ 2) 📍📍📍
+// เรากำหนด Type 'Project[]' ให้กับ Array นี้
+const mockProjects: Project[] = [
   // --- Pattern 1 (Index 0-4) ---
   {
     id: 1,
     title: "JOBESAN - เว็บแอปหางาน (React & Supabase)",
-    categoryKey: "fullStack", // ใช้ 'fullStack', 'uiUx', 'data'
-    // TAG: [Placeholder] รูปภาพการ์ด 1
+    categoryKey: "fullStack", // <-- (ตอนนี้ TypeScript ตรวจสอบแล้วว่า 'fullStack' ถูกต้อง)
     imageUrl: "images/job-details-page.jpg",
     projectUrl: "https://github.com/sixday-dev/jobesan-app-showcase" 
   },
   {
     id: 2,
     title: "ZEAL PROTECH - เว็บไซต์ Renewal (HTML/CSS/JS)",
-    categoryKey: "uiUx",
-    // TAG: [Placeholder] รูปภาพการ์ด 2
+    categoryKey: "uiUx", // <-- (ถูกต้อง)
     imageUrl: "images/zeal-home-desktop.jpg",
     projectUrl: "https://github.com/sixday-dev/zeal-website-showcase"
   },
   {
     id: 3,
     title: "UDA Website - การยกเครื่อง UI/UX (React)",
-    categoryKey: "uiUx",
-    // TAG: [Placeholder] รูปภาพการ์ด 3
+    categoryKey: "uiUx", // <-- (ถูกต้อง)
     imageUrl: "images/about-us-page.jpg",
     projectUrl: "https://github.com/sixday-dev/uda-website-showcase"
   },
   {
-    // TAG: นี่คือการ์ดที่ 4 (index 3) ที่จะเป็นการ์ดใหญ่
     id: 4,
     title: "ZEAL Warranty - ระบบประกันและวิเคราะห์ข้อมูล (Data-Driven)",
-    categoryKey: "data",
-    // TAG: [Placeholder] รูปภาพการ์ด 4 (ใหญ่)
+    categoryKey: "data", // <-- (ถูกต้อง)
     imageUrl: "images/dashboard-qr-print.jpg",
     projectUrl: "https://github.com/sixday-dev/zeal-warranty-system"
   },
   {
-    // TAG: นี่คือการ์ดที่ 5 (index 4) ที่จะอยู่ข้างการ์ดใหญ่ (แนวตั้ง)
     id: 5,
     title: "UD Auto Glass - ระบบจองคิวและ Dashboard (Full-Stack)",
-    categoryKey: "fullStack",
-    // TAG: [Placeholder] รูปภาพการ์ด 5
+    categoryKey: "fullStack", // <-- (ถูกต้อง)
     imageUrl: "images/booking-step2-calendar.jpg",
     projectUrl: "https://github.com/sixday-dev/showcase-ud-auto-glass-UDG"
   },
   
-  // --- Pattern 2 (Index 5-9) ---
+  // (Mock Data ที่เหลือ (ที่คอมเมนต์ไว้) คงเดิม)
   //{
-  //  id: 6,
-  //  title: "Project Zeta",
-  //  categoryKey: "data",
-    // TAG: [Placeholder] รูปภาพการ์ด 6
-  //  imageUrl: "https://placehold.co/800x600/166534/FFFFFF?text=Project+Zeta",
-  //},
-  //{
-  //  id: 7,
-  //  title: "Project Eta",
-  //  categoryKey: "fullStack",
-    // TAG: [Placeholder] รูปภาพการ์ด 7
-  //  imageUrl: "https://placehold.co/800x600/991B1B/FFFFFF?text=Project+Eta",
-  //},
-  //{
-  //  id: 8,
-  //  title: "Brand Identity 'Theta'",
-  //  categoryKey: "uiUx",
-    // TAG: [Placeholder] รูปภาพการ์ด 8
-  //  imageUrl: "https://placehold.co/800x600/1D4ED8/FFFFFF?text=Project+Theta",
-  //},
-  //{
-    // TAG: การ์ดที่ 9 (index 8) -> (index % 5) = 3 -> เป็นการ์ดใหญ่
-  //  id: 9,
-  //  title: "AI Analytics Tool",
-  //  categoryKey: "data",
-    // TAG: [Placeholder] รูปภาพการ์ด 9 (ใหญ่)
-  //  imageUrl: "https://placehold.co/1200x675/7E22CE/FFFFFF?text=Project+Iota+(Large)",
-  //},
-  //{
-    // TAG: การ์ดที่ 10 (index 9) -> (index % 5) = 4 -> เป็นการ์ดแนวตั้ง
-  //  id: 10,
-  //  title: "Project Kappa",
-  //  categoryKey: "fullStack",
-    // TAG: [Placeholder] รูปภาพการ์ด 10
-  //  imageUrl: "https://placehold.co/600x800/B45309/FFFFFF?text=Project+Kappa",
+  //  ...
   //},
 ];
 // --------------------------------------------------------------------------------
 
-// TAG: [THE-FIX] (1/2) สร้าง Type ที่แม่นยำสำหรับ 't' (t.work)
+// (Interface WorkTranslations ที่เราแก้ไปแล้ว - คงเดิม)
 interface WorkTranslations {
   title: string;
   description: string;
@@ -123,30 +80,22 @@ interface WorkTranslations {
   };
 }
 
-// TAG: [THE-FIX] (2/2) 📍📍📍 นี่คือจุดที่แก้ไข (จุดที่ 1) 📍📍📍
-// สร้าง Type 'FilterKey' จาก 'WorkTranslations'
+// (Type FilterKey ที่เราแก้ไปแล้ว - คงเดิม)
 type FilterKey = keyof WorkTranslations['filters'];
 
 
-// (Interface และ filterCategories คงเดิม)
 interface WorkSectionProps {
-  t: WorkTranslations; // <-- (เราแก้ 'any' ไปแล้ว)
-  // locale: string; // <-- (เราลบ 'locale' ไปแล้ว)
+  t: WorkTranslations;
 }
 
-// TAG: [THE-FIX] (2/2) 📍📍📍 นี่คือจุดที่แก้ไข (จุดที่ 2) 📍📍📍
-// บอก TypeScript ว่า Array นี้ ใช้ 'FilterKey' ไม่ใช่ 'string' ทั่วไป
+// (const filterCategories ที่เราแก้ไปแล้ว - คงเดิม)
 const filterCategories: FilterKey[] = ["all", "fullStack", "uiUx", "data"];
 
-// TAG: (เราลบ 'locale' ออกจาก props ที่รับมาแล้ว)
 const WorkSection: React.FC<WorkSectionProps> = ({ t }) => {
-  // (State และ Logic การ Filter คงเดิม)
+  // (State, useEffect, filteredProjects, tWork - คงเดิม)
   const [activeFilter, setActiveFilter] = useState("all");
-
-  // TAG: [THE-FIX] (3/4) สร้าง State 'isClient' (คงเดิม)
   const [isClient, setIsClient] = useState(false);
 
-  // useEffect (คงเดิม)
   useEffect(() => {
     setIsClient(true);
   }, []); 
@@ -166,12 +115,9 @@ const WorkSection: React.FC<WorkSectionProps> = ({ t }) => {
     >
       <div className="container mx-auto px-4 md:px-8">
         
-        {/* ----------------------------------- */}
-        {/* TAG: Row 1: Header & 3D Model      */}
-        {/* ----------------------------------- */}
+        {/* (Row 1: Header & 3D Model - คงเดิม) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center mb-16 md:mb-24">
           
-          {/* Column 1: Text Content (คงเดิม) */}
           <div className="text-slate-900 dark:text-white">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               {tWork.title}
@@ -181,19 +127,15 @@ const WorkSection: React.FC<WorkSectionProps> = ({ t }) => {
             </p>
           </div>
 
-          {/* TAG: [THE-FIX] (4/4) Column 2: Spline 3D Model (คงเดิม) */}
-          {/* ส่วนนี้จะทำงานถูกต้องแล้ว เพราะตอนนี้ 'Spline' เป็น Component ที่ถูกต้อง (ไม่ 'undefined') */}
           <div className="
             w-full h-[400px] md:h-full md:min-h-[450px] 
             rounded-2xl overflow-hidden
           ">
             {isClient ? (
-              // นี่คือ Component ฝั่ง Client
               <Spline
                 scene="https://prod.spline.design/EKRHHTipp0MXQQgx/scene.splinecode" 
               />
             ) : (
-              // นี่คือ Placeholder ที่จะแสดงผลตอน Server Render
               <div className="w-full h-full flex items-center justify-center text-slate-500 dark:text-slate-400">
                 Loading 3D Model...
               </div>
@@ -201,13 +143,8 @@ const WorkSection: React.FC<WorkSectionProps> = ({ t }) => {
           </div>
         </div>
 
-        {/* ----------------------------------- */}
-        {/* TAG: Row 2: Filters & Grid (คงเดิม) */}
-        {/* ----------------------------------- */}
-        
-        {/* Sub-row 1: Filter Buttons (คงเดิม) */}
+        {/* (Row 2: Filters - คงเดิม) */}
         <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mb-12">
-          {/* 'key' ใน .map() ตอนนี้เป็น 'FilterKey' (Type-Safe) */}
           {filterCategories.map((key) => {
             const isActive = activeFilter === key;
             return (
@@ -222,14 +159,13 @@ const WorkSection: React.FC<WorkSectionProps> = ({ t }) => {
                   }
                 `}
               >
-                {/* (บรรทัด 216) ตอนนี้ถูกต้องแล้ว เพราะ TypeScript รู้ว่า 'key' คือ 'FilterKey' */}
                 {tWork.filters[key]}
               </button>
             );
           })}
         </div>
 
-        {/* Sub-row 2: Abstract Project Grid (คงเดิม) */}
+        {/* (Row 3: Abstract Project Grid - คงเดิม) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {filteredProjects.map((project, index) => {
             
@@ -244,6 +180,9 @@ const WorkSection: React.FC<WorkSectionProps> = ({ t }) => {
             }
             
             return (
+              // TAG: [THE-FIX] (3/3) 📍📍📍 นี่คือจุดที่แก้ไข (จุดที่ 3) 📍📍📍
+              // 'project' (ที่ส่งเข้าไป) ตอนนี้มี Type ที่ถูกต้องแล้ว
+              // Error 'Type error' จะหายไป
               <ProjectCard
                 key={project.id}
                 project={project}
