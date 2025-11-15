@@ -21,8 +21,7 @@ const showProjectTextVariants = {
 // TAG: Types Definition
 // --------------------------------------------------------------------------------
 
-// TAG: [THE-FIX] (1/3) 📍📍📍 นี่คือจุดที่แก้ไข 📍📍📍
-// เรา 'export' Type นี้ เพื่อให้ WorkSection (ไฟล์แม่) นำไปใช้ได้
+// TAG: (นี่คือ 'export' ที่เราแก้ไปครั้งก่อน - คงเดิม)
 export type Project = {
   id: number;
   title: string;
@@ -42,7 +41,7 @@ type CardTranslations = {
 };
 
 interface ProjectCardProps {
-  project: Project; // <-- (ใช้ Type นี้)
+  project: Project;
   tCard: CardTranslations;
   cardStyle: string;
 }
@@ -52,7 +51,9 @@ interface ProjectCardProps {
 // --------------------------------------------------------------------------------
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, tCard, cardStyle }) => {
-  const transition = { duration: 0.3, ease: "easeInOut" };
+  // TAG: [THE-FIX] (1/1) 📍📍📍 นี่คือจุดที่แก้ไข 📍📍📍
+  // เราเพิ่ม 'as const' เพื่อบอก TypeScript ว่า "easeInOut" คือค่าคงที่
+  const transition = { duration: 0.3, ease: "easeInOut" } as const; // <-- 📍 เพิ่มตรงนี้
 
   return (
     // TAG: (โค้ด <motion.a> ที่เราแก้ไปแล้ว - คงเดิม)
@@ -90,7 +91,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, tCard, cardStyle }) 
           <motion.div
             className="absolute inset-0"
             variants={categoryTextVariants}
-            transition={transition}
+            transition={transition} // <-- (บรรทัด 93) ตอนนี้ถูกต้องแล้ว
           >
             <p className="text-sm md:text-base text-slate-200">
               {tCard.categories[project.categoryKey]}
@@ -101,7 +102,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, tCard, cardStyle }) 
           <motion.div
             className="absolute inset-0 flex items-center gap-2"
             variants={showProjectTextVariants}
-            transition={transition}
+            transition={transition} // <-- (ที่นี่ก็ใช้ 'transition' ที่เราแก้แล้ว)
           >
             <p className="text-sm md:text-base font-semibold">
               {tCard.showProject}
