@@ -11,7 +11,8 @@ import React from 'react';
 
 export function ThemeToggle() {
   
-  const { theme, setTheme, resolvedTheme } = useCustomTheme();
+  // TAG: [THE-FIX] (1/2) ลบ 'theme' ที่ไม่ได้ใช้ออก (แก้ Warning)
+  const { setTheme, resolvedTheme } = useCustomTheme();
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -30,11 +31,13 @@ export function ThemeToggle() {
   };
 
   // Animation แบบ Spring
+  // TAG: [THE-FIX] (2/2) เพิ่ม 'as const' (แก้ Build Error)
+  // เพื่อบอก TypeScript ว่า 'type: "spring"' คือค่าคงที่ ไม่ใช่ string ทั่วไป
   const spring = {
     type: "spring",
     stiffness: 700,
     damping: 30
-  };
+  } as const; // <-- 📍 เพิ่มตรงนี้
 
   return (
     <div 
@@ -54,7 +57,7 @@ export function ThemeToggle() {
       <motion.div
         className="w-6 h-6 bg-white rounded-full shadow-md z-20"
         layout // <-- Framer Motion จะ animate การเปลี่ยนแปลง layout
-        transition={spring}
+        transition={spring} // <-- (บรรทัด 57) ตอนนี้ถูกต้องแล้ว
         // ถ้าเป็น Dark Mode ให้ margin-left เป็น auto (เลื่อนไปขวา)
         style={{ marginLeft: isDarkMode ? 'auto' : '0px' }} 
       />
