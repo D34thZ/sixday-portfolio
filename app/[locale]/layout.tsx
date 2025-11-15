@@ -40,7 +40,7 @@ export const metadata = {
 const inter = Inter({ subsets: ['latin'] });
 
 // TAG: [THE-FIX] (3/4) สร้าง Interface สำหรับ Props
-// นี่คือการแก้ 'Type error'
+// (ส่วนนี้ถูกต้องแล้ว)
 interface LocaleLayoutProps {
   children: ReactNode;
   params: {
@@ -48,8 +48,8 @@ interface LocaleLayoutProps {
   };
 }
 
-// TAG: [THE-FIX] (4/4) ใช้ Interface ใหม่แทนการกำหนด Type แบบ inline
-export default async function LocaleLayout({
+// TAG: [THE-FIX] (4/4) 📍📍📍 ลบ 'async' ออกจากบรรทัดนี้ 📍📍📍
+export default function LocaleLayout({
   children,
   params
 }: LocaleLayoutProps) { // <-- 📍 ใช้ 'LocaleLayoutProps' ที่นี่
