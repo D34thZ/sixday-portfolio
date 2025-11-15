@@ -37,26 +37,30 @@ const sectionVariants = {
   },
 };
 
+// TAG: [THE-FIX] (1/2) 📍📍📍 นี่คือจุดที่แก้ไข 📍📍📍
+// เราเพิ่ม 'as const' เพื่อบอก TypeScript ว่า "spring" คือค่าคงที่
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 100 },
+    transition: { type: "spring", stiffness: 100 } as const, // <-- 📍 เพิ่มตรงนี้
   },
 };
 
+// TAG: [THE-FIX] (2/2) 📍📍📍 นี่คือจุดที่แก้ไข (จุดที่ 2) 📍📍📍
+// เราเพิ่ม 'as const' ที่นี่ด้วย เพื่อป้องกัน Error ถัดไป
 const iconHover = {
   scale: 1.2,
   rotate: -5,
-  transition: { type: "spring", stiffness: 300 },
+  transition: { type: "spring", stiffness: 300 } as const, // <-- 📍 เพิ่มตรงนี้
 };
 
 // --------------------------------------------------------------------------------
 // TAG: ContactSection Component
 // --------------------------------------------------------------------------------
 
-// TAG: [THE-FIX] (1/1) สร้าง Type ที่แม่นยำสำหรับ 't' (t.contact)
+// TAG: (Type ที่เราแก้ไปแล้ว - คงเดิม)
 interface ContactTranslations {
   name: string;
   title: string;
@@ -77,11 +81,11 @@ interface ContactTranslations {
 }
 
 interface ContactSectionProps {
-  t: ContactTranslations; // <-- เปลี่ยนจาก 'any'
+  t: ContactTranslations; 
 }
 
 const ContactSection: React.FC<ContactSectionProps> = ({ t }) => {
-  // TAG: [FIX] เปลี่ยน 'icon' ให้ชี้ไปที่ Component ที่ Import มาจาก 'react-icons'
+  // TAG: (Socials array - คงเดิม)
   const socials = [
     { name: "GitHub", icon: FaGithub, link: t.links.github },
     { name: "Facebook", icon: FaFacebook, link: t.links.facebook },
@@ -92,7 +96,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ t }) => {
   ];
 
   return (
-    // TAG: Section Wrapper
+    // TAG: Section Wrapper (คงเดิม)
     <motion.section
       id="contact"
       className="mb-32 scroll-mt-24"
@@ -108,7 +112,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ t }) => {
           rounded-3xl border border-gray-200 dark:border-slate-700 
           shadow-xl overflow-hidden
         "
-        variants={itemVariants}
+        variants={itemVariants} // <-- (บรรทัด 111) ตอนนี้ถูกต้องแล้ว
       >
         {/* นี่คือ Grid Layout (2 คอลัมน์) */}
         <div className="grid grid-cols-1 md:grid-cols-2">
@@ -119,7 +123,6 @@ const ContactSection: React.FC<ContactSectionProps> = ({ t }) => {
           <div className="p-8 md:p-12 lg:p-16 flex flex-col items-center md:items-start text-center md:text-left">
             {/* TAG: [Placeholder] รูปภาพโปรไฟล์ (250x250) */}
             <motion.img
-              // TAG: [FIX] แก้ไข Typo ที่ผมทำพลาดครั้งก่อน
               src="images/profile_chris.png" 
               alt="Chris Profile Picture"
               className="rounded-full w-[180px] h-[180px] md:w-[250px] md:h-[250px] object-cover shadow-2xl mb-6"
@@ -198,7 +201,6 @@ const ContactSection: React.FC<ContactSectionProps> = ({ t }) => {
             <motion.h3 variants={itemVariants} className="text-xl font-bold text-slate-900 dark:text-white mb-6">
               {t.socialTitle}
             </motion.h3> 
-            {/* TAG: [FIX] แก้ไขจาก </D> เป็น </motion.h3> */}
 
             <motion.div 
               className="flex flex-wrap gap-5"
@@ -208,15 +210,14 @@ const ContactSection: React.FC<ContactSectionProps> = ({ t }) => {
                 // TAG: [Placeholder] Social Links
                 <motion.a
                   key={social.name}
-                  href={social.link} // <-- นี่คือ link (ปัจจุบันเป็น '#')
+                  href={social.link} 
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Follow on ${social.name}`}
                   variants={itemVariants}
-                  whileHover={iconHover} // Animation ตอน Hover
+                  whileHover={iconHover} // <-- (ที่นี่ก็ใช้ 'iconHover' ที่เราแก้แล้ว)
                   className="text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
-                  {/* นี่คือจุดที่ 'icon' (ที่เป็น Component) ถูกเรนเดอร์ */}
                   <social.icon className="h-7 w-7" />
                 </motion.a>
               ))}
