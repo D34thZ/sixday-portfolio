@@ -1,6 +1,7 @@
 // 📍 ที่อยู่ไฟล์: app/components/sections/HeroHeader.tsx
 'use client';
 
+// TAG: [THE-FIX] (1/2) Import 'HTMLCanvasElement' Type
 import React, { useEffect, useRef, useState } from 'react';
 
 // * TAG: [i18n-FIX] (3/6)
@@ -17,7 +18,10 @@ interface HeroHeaderProps {
 }
 
 export default function HeroHeader({ t }: HeroHeaderProps) {
-  const canvasRef = useRef(null);
+  // TAG: [THE-FIX] (2/2) 📍📍📍 นี่คือจุดที่แก้ไข 📍📍📍
+  // เราบอก TypeScript ว่า Ref นี้ จะเก็บ <HTMLCanvasElement>
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -25,7 +29,13 @@ export default function HeroHeader({ t }: HeroHeaderProps) {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
+    // (บรรทัด 28) ตอนนี้ TypeScript เข้าใจแล้วว่า 'canvas' คือ HTMLCanvasElement
+    // 'getContext' จึงไม่ใช่ Error อีกต่อไป
     const ctx = canvas.getContext('2d');
+
+    // (เพิ่ม Safety Check สำหรับ ctx)
+    if (!ctx) return; 
+
     const setCanvasSize = () => {
       canvas.width = canvas.offsetWidth * window.devicePixelRatio;
       canvas.height = canvas.offsetHeight * window.devicePixelRatio;
@@ -127,7 +137,7 @@ export default function HeroHeader({ t }: HeroHeaderProps) {
   return (
     <header id="home" className="relative w-full h-screen overflow-hidden">
       <canvas
-        ref={canvasRef as React.RefObject<HTMLCanvasElement>}
+        ref={canvasRef} // (เราไม่จำเป็นต้อง Cast ที่นี่ เพราะเราแก้ที่ 'useRef' ต้นทางแล้ว)
         onMouseMove={handleMouseMove}
         className="absolute inset-0 w-full h-full"
       />
