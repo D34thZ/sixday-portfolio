@@ -8,20 +8,23 @@ import { MapPin, Globe, Plus, Minus } from "lucide-react";
 
 // --------------------------------------------------------------------------------
 // TAG: Animation Variants
-// (ส่วนนี้คงเดิม 100%)
 // --------------------------------------------------------------------------------
+// TAG: [THE-FIX] (1/2) 📍📍📍 นี่คือจุดที่แก้ไข 📍📍📍
+// เราเพิ่ม 'as const' เพื่อบอก TypeScript ว่า "easeInOut" คือค่าคงที่
 const contentVariants = {
+  // สถานะ "พับเก็บ" (collapsed)
   collapsed: {
     height: 0,
     opacity: 0,
     marginTop: 0,
-    transition: { duration: 0.3, ease: "easeInOut" },
+    transition: { duration: 0.3, ease: "easeInOut" } as const, // <-- 📍 เพิ่มตรงนี้
   },
+  // สถานะ "ขยาย" (open)
   open: {
-    height: "auto",
+    height: "auto", // ขยายตามความสูงเนื้อหา
     opacity: 1,
-    marginTop: "1rem",
-    transition: { duration: 0.3, ease: "easeInOut" },
+    marginTop: "1rem", // เว้นระยะห่างจากแถบ Header
+    transition: { duration: 0.3, ease: "easeInOut" } as const, // <-- 📍 เพิ่มตรงนี้
   },
 };
 
@@ -35,8 +38,7 @@ interface ExperienceSectionProps {
     title: string;
     items: ExperienceItemProps[];
   };
-  // TAG: [THE-FIX] (1/2) ลบ 'locale: string;' ที่ไม่ได้ใช้ออก (แก้ Warning)
-  // locale: string;
+  // TAG: (เราได้ลบ 'locale: string;' ที่ไม่ได้ใช้ออกไปแล้ว)
 }
 
 // Type สำหรับข้อมูลแต่ละรายการ
@@ -54,7 +56,7 @@ interface ExperienceItemProps {
 // TAG: ExperienceSection Component
 // --------------------------------------------------------------------------------
 
-// TAG: [THE-FIX] (2/2) ลบ 'locale' ออกจาก props ที่รับมา
+// TAG: (เราได้ลบ 'locale' ออกจาก props ที่รับมาแล้ว)
 const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
   // State สำหรับเก็บ Index ของแถบที่กำลังเปิดอยู่ (null = ปิดทั้งหมด)
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -65,6 +67,9 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
   };
 
   return (
+    // TAG: Section Wrapper
+    // เราย้าย id="experience" มาไว้ที่นี่
+    // และใช้ mb-32 เหมือน Section อื่นๆ
     <section id="experience" className="mb-32 scroll-mt-24">
       
       {/* TAG: Row 1: Title (My Journey / เส้นทางของผม) */}
@@ -74,6 +79,7 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
 
       {/* TAG: Row 2: Accordion List */}
       <div className="max-w-4xl mx-auto space-y-4">
+        {/* วน Loop ข้อมูล 4 รายการที่ส่งมาจาก page.tsx */}
         {t.items.map((item, index) => {
           const isOpen = openIndex === index;
 
@@ -89,8 +95,8 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
                   border border-gray-200 dark:border-slate-700 shadow-lg
                   cursor-pointer transition-all duration-300
                   ${isOpen 
-                    ? "rounded-t-2xl"
-                    : "rounded-2xl hover:shadow-xl"
+                    ? "rounded-t-2xl" // ถ้าเปิด, ทำให้มนแค่ด้านบน
+                    : "rounded-2xl hover:shadow-xl" // ถ้าปิด, ทำให้มนทั้งหมด
                   }
                 `}
               >
@@ -104,6 +110,7 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
                   <span className="text-sm md:text-base font-medium text-blue-600 dark:text-blue-400">
                     {item.years}
                   </span>
+                  {/* สลับไอคอน + / - ตามสถานะ isOpen */}
                   {isOpen ? (
                     <Minus className="h-5 w-5 text-slate-600 dark:text-slate-300" />
                   ) : (
@@ -113,6 +120,7 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
               </div>
 
               {/* TAG: Accordion Content (แถบสีย่อยที่ขยาย/พับ) */}
+              {/* AnimatePresence ใช้สำหรับจัดการ Animation ตอน "พับเก็บ" (Exit) */}
               <AnimatePresence>
                 {isOpen && (
                   <motion.div
@@ -120,13 +128,14 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
                     initial="collapsed"
                     animate="open"
                     exit="collapsed"
-                    variants={contentVariants}
+                    variants={contentVariants} // <-- (บรรทัด 123) ตอนนี้ถูกต้องแล้ว
                     className="
                       bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm
                       border-x border-b border-gray-200 dark:border-slate-700
                       rounded-b-2xl shadow-inner
                     "
                   >
+                    {/* ใช้ Flexbox สำหรับแบ่ง 2 Columns (80/20) */}
                     <div className="flex flex-col md:flex-row p-6">
                       
                       {/* --- Column 1 (80%) --- */}
@@ -175,6 +184,7 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
 
                       {/* --- Column 2 (20%) --- */}
                       <div className="w-full md:w-1/5 mt-6 md:mt-0 flex items-center justify-center">
+                        {/* TAG: [Placeholder] รูปภาพโลโก้บริษัท */}
                         <img
                           src={item.logoUrl}
                           alt={`${item.title} Logo`}
