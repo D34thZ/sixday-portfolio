@@ -1,7 +1,8 @@
 // 📍 ที่อยู่ไฟล์: app/layout.tsx (Root Layout)
 // (ฉบับแก้ไข: ลบ <html>, <body>, และ Inter ทิ้ง)
 
-// (แก้) Import globals.css ที่นี่
+// TAG: [THE-FIX] (1/2) Import 'ReactNode' โดยตรง
+import { ReactNode } from 'react';
 import './globals.css';
 
 // (ลบ) metadata (ย้ายไป locale layout)
@@ -10,7 +11,9 @@ import './globals.css';
 export default function RootLayout({
   children,
 }: {
-  children: React.React.Node;
+  // TAG: [THE-FIX] (2/2) 📍📍📍 นี่คือจุดที่แก้ไข 📍📍📍
+  // เปลี่ยนจาก 'React.React.Node' (ที่พิมพ์ผิด) เป็น 'ReactNode'
+  children: ReactNode;
 }) {
   // * TAG: [Fix-Nested-HTML]
   // * ห้ามมี <html> หรือ <body> ที่นี่
