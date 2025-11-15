@@ -1,9 +1,6 @@
 "use client";
 
-// TAG: [Component] ExperienceSection
-// นี่คือ Component หลักสำหรับส่วน "Experience"
-// เราใช้ "use client" เพราะต้องใช้ useState (สำหรับเปิด/ปิด)
-// และ Framer Motion (สำหรับ Animation)
+// 📍 ที่อยู่ไฟล์: app/components/sections/ExperienceSection.tsx
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,18 +11,16 @@ import { MapPin, Globe, Plus, Minus } from "lucide-react";
 // (ส่วนนี้คงเดิม 100%)
 // --------------------------------------------------------------------------------
 const contentVariants = {
-  // สถานะ "พับเก็บ" (collapsed)
   collapsed: {
     height: 0,
     opacity: 0,
     marginTop: 0,
     transition: { duration: 0.3, ease: "easeInOut" },
   },
-  // สถานะ "ขยาย" (open)
   open: {
-    height: "auto", // ขยายตามความสูงเนื้อหา
+    height: "auto",
     opacity: 1,
-    marginTop: "1rem", // เว้นระยะห่างจากแถบ Header
+    marginTop: "1rem",
     transition: { duration: 0.3, ease: "easeInOut" },
   },
 };
@@ -40,7 +35,7 @@ interface ExperienceSectionProps {
     title: string;
     items: ExperienceItemProps[];
   };
-  // TAG: [THE-FIX] (1/2) ลบ 'locale: string;' ที่ไม่ได้ใช้ออก
+  // TAG: [THE-FIX] (1/2) ลบ 'locale: string;' ที่ไม่ได้ใช้ออก (แก้ Warning)
   // locale: string;
 }
 
@@ -70,9 +65,6 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
   };
 
   return (
-    // TAG: Section Wrapper
-    // เราย้าย id="experience" มาไว้ที่นี่
-    // และใช้ mb-32 เหมือน Section อื่นๆ
     <section id="experience" className="mb-32 scroll-mt-24">
       
       {/* TAG: Row 1: Title (My Journey / เส้นทางของผม) */}
@@ -82,7 +74,6 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
 
       {/* TAG: Row 2: Accordion List */}
       <div className="max-w-4xl mx-auto space-y-4">
-        {/* วน Loop ข้อมูล 4 รายการที่ส่งมาจาก page.tsx */}
         {t.items.map((item, index) => {
           const isOpen = openIndex === index;
 
@@ -98,8 +89,8 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
                   border border-gray-200 dark:border-slate-700 shadow-lg
                   cursor-pointer transition-all duration-300
                   ${isOpen 
-                    ? "rounded-t-2xl" // ถ้าเปิด, ทำให้มนแค่ด้านบน
-                    : "rounded-2xl hover:shadow-xl" // ถ้าปิด, ทำให้มนทั้งหมด
+                    ? "rounded-t-2xl"
+                    : "rounded-2xl hover:shadow-xl"
                   }
                 `}
               >
@@ -113,7 +104,6 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
                   <span className="text-sm md:text-base font-medium text-blue-600 dark:text-blue-400">
                     {item.years}
                   </span>
-                  {/* สลับไอคอน + / - ตามสถานะ isOpen */}
                   {isOpen ? (
                     <Minus className="h-5 w-5 text-slate-600 dark:text-slate-300" />
                   ) : (
@@ -123,7 +113,6 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
               </div>
 
               {/* TAG: Accordion Content (แถบสีย่อยที่ขยาย/พับ) */}
-              {/* AnimatePresence ใช้สำหรับจัดการ Animation ตอน "พับเก็บ" (Exit) */}
               <AnimatePresence>
                 {isOpen && (
                   <motion.div
@@ -138,7 +127,6 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
                       rounded-b-2xl shadow-inner
                     "
                   >
-                    {/* ใช้ Flexbox สำหรับแบ่ง 2 Columns (80/20) */}
                     <div className="flex flex-col md:flex-row p-6">
                       
                       {/* --- Column 1 (80%) --- */}
@@ -187,7 +175,6 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
 
                       {/* --- Column 2 (20%) --- */}
                       <div className="w-full md:w-1/5 mt-6 md:mt-0 flex items-center justify-center">
-                        {/* TAG: [Placeholder] รูปภาพโลโก้บริษัท */}
                         <img
                           src={item.logoUrl}
                           alt={`${item.title} Logo`}

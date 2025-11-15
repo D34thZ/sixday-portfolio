@@ -21,7 +21,7 @@ const HamburgerButton = ({ isOpen, toggle, color }: { isOpen: boolean, toggle: (
   </motion.button>
 );
 
-// TAG: [THE-FIX] (1/6) สร้าง Type สำหรับ Mobile Nav Item
+// TAG: (Type ที่เราแก้ไปแล้ว - คงเดิม)
 interface MobileNavItem {
   id: string;
   href: string;
@@ -30,9 +30,7 @@ interface MobileNavItem {
   locale: string;
 }
 
-// * TAG: [i18n-FIX] (5/6)
-// * อัปเดต MobileMenuOverlay ให้รองรับ 2 ภาษา
-// TAG: [THE-FIX] (2/6) ใช้ Type 'MobileNavItem[]' แทน 'any[]'
+// (MobileMenuOverlay ที่เราแก้ไปแล้ว - คงเดิม)
 const MobileMenuOverlay = ({ items, onClose }: { items: MobileNavItem[], onClose: () => void }) => (
   <motion.div
     className="fixed inset-0 z-40 flex flex-col items-center justify-center space-y-8
@@ -55,11 +53,9 @@ const MobileMenuOverlay = ({ items, onClose }: { items: MobileNavItem[], onClose
           className="font-mono text-3xl text-slate-900 transition-colors hover:text-blue-600 font-bold
                      dark:text-slate-50 dark:hover:text-blue-400"
         >
-          {/* (เพิ่ม) ถ้าเป็นอังกฤษ ให้แสดง < / ... > */}
           {item.locale === 'en' ? (
             <>&lt;/{item.label}&gt;</>
           ) : (
-            // (เพิ่ม) ถ้าเป็นไทย แสดงแค่ Label
             <>{item.label}</>
           )}
         </Link>
@@ -68,7 +64,7 @@ const MobileMenuOverlay = ({ items, onClose }: { items: MobileNavItem[], onClose
   </motion.div>
 );
 
-// (LanguageToggle คงเดิม - ฉบับแก้ไขล่าสุด)
+// (LanguageToggle คงเดิม)
 const LanguageToggle = () => {
   const params = useParams();
   const pathname = usePathname();
@@ -78,7 +74,9 @@ const LanguageToggle = () => {
     return pathname.replace(`/${currentLocale}`, `/${targetLocale}`);
   };
 
-  const spring = { type: "spring", stiffness: 700, damping: 30 };
+  // TAG: [THE-FIX] 📍📍📍 นี่คือจุดที่แก้ไข 📍📍📍
+  // เราเพิ่ม 'as const' เพื่อบอก TypeScript ว่า "spring" คือค่าคงที่
+  const spring = { type: "spring", stiffness: 700, damping: 30 } as const;
 
   const linkClasses = "relative z-10 w-10 text-center rounded-full px-3 py-1 transition-colors duration-200";
   const activeText = "text-slate-900 dark:text-slate-100";
@@ -91,7 +89,7 @@ const LanguageToggle = () => {
       <motion.div
         className="absolute z-0 top-1 w-10 h-[calc(100%-8px)] bg-white dark:bg-slate-700 rounded-full shadow-sm"
         layout
-        transition={spring} 
+        transition={spring} // <-- บรรทัดนี้ (94) ตอนนี้ถูกต้องแล้ว
         style={{ left: currentLocale === 'th' ? '4px' : '48px' }}
       />
       <Link 
@@ -110,7 +108,8 @@ const LanguageToggle = () => {
   );
 };
 
-// TAG: [THE-FIX] (3/6) สร้าง Type สำหรับ Base Nav Item
+
+// TAG: (Type ที่เราแก้ไปแล้ว - คงเดิม)
 interface BaseNavItem {
   id: string;
   href: string;
@@ -118,24 +117,21 @@ interface BaseNavItem {
   number: string;
 }
 
-// * TAG: [i18n-FIX] (6/6)
-// * "ผ่าตัด" MenuLinks เพื่อรับ 'locale' และแสดงผลแบบมีเงื่อนไข
+// (MenuLinks ที่เราแก้ไปแล้ว - คงเดิม)
 const MenuLinks = ({ 
-  locale, // <-- (A) รับ locale
+  locale, 
   navItems, 
   textColor, 
   hoveredItem, 
   setHoveredItem 
 }: { 
-  locale: string; // <-- (A) เพิ่ม Type
-  // TAG: [THE-FIX] (4/6) ใช้ Type 'BaseNavItem[]' แทน 'any[]'
+  locale: string;
   navItems: BaseNavItem[], 
   textColor: string, 
   hoveredItem: string | null, 
   setHoveredItem: (id: string | null) => void 
 }) => {
   
-  // (B) กำหนดโครงสร้าง Eng labels ไว้ที่นี่
   const enLabels: { [key: string]: { label: string, splitAt: number } } = {
     home: { label: "home", splitAt: 3 },
     expertise: { label: "expertise", splitAt: 8 },
@@ -161,13 +157,12 @@ const MenuLinks = ({
             className={`
               relative transition-all duration-300 ease-out font-mono tracking-wide font-bold
               text-[17.6px] 
-              whitespace-nowrap {/* <-- * TAG: [THE-FIX] เพิ่มบรรทัดนี้ */}
+              whitespace-nowrap 
               ${textColor}
               ${isHovered ? 'opacity-100' : ''} 
               ${isOtherHovered ? 'opacity-50' : ''}
             `}
           >
-            {/* (C) Conditional Rendering */}
             {locale === 'en' ? (
               // === เวอร์ชันอังกฤษ (มี < / >) ===
               <>
@@ -182,7 +177,7 @@ const MenuLinks = ({
             ) : (
               // === เวอร์ชันไทย (ไม่มี < / >) ===
               <>
-                {item.label} {/* นี่คือ "หน้าหลัก", "ตัวตน", ฯลฯ */}
+                {item.label} 
                 <span className="relative">
                   <span className={`absolute -top-4 left-1/2 -translate-x-1/2 text-[10px] transition-opacity duration-300 ease-out ${isHovered ? 'opacity-100' : 'opacity-60'} ${isOtherHovered ? 'opacity-30' : ''}`}>
                     {item.number}
@@ -200,7 +195,7 @@ const MenuLinks = ({
 
 // === Component หลัก ===
 
-// * TAG: [i18n-FIX] (Interface สำหรับ tNav)
+// (Interface สำหรับ tNav - คงเดิม)
 interface NavTranslations {
   home: string;
   expertise: string;
@@ -209,7 +204,7 @@ interface NavTranslations {
   contact: string;
 }
 
-// * TAG: [i18n-FIX] (รับ prop 'tNav')
+// (Component NewNavbar - คงเดิม)
 export function NewNavbar({ tNav }: { tNav: NavTranslations }) {
   const [scrolled, setScrolled] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -225,8 +220,7 @@ export function NewNavbar({ tNav }: { tNav: NavTranslations }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []); 
 
-  // * TAG: [i18n-FIX] (สร้าง navItems โดยใช้ tNav)
-  // TAG: [THE-FIX] (5/6) กำหนด Type ให้ 'navItems'
+  // (navItems - คงเดิม)
   const navItems: BaseNavItem[] = [
     { id: 'home', href: `/${locale}#home`, label: tNav.home, number: '01' },
     { id: 'expertise', href: `/${locale}#expertise`, label: tNav.expertise, number: '02' },
@@ -235,8 +229,7 @@ export function NewNavbar({ tNav }: { tNav: NavTranslations }) {
     { id: 'contact', href: `/${locale}#contact`, label: tNav.contact, number: '05' },
   ];
 
-  // * TAG: [i18n-FIX] (ส่ง locale ไปให้ MobileMenuOverlay)
-  // TAG: [THE-FIX] (6/6) กำหนด Type ให้ 'mobileNavItems'
+  // (mobileNavItems - คงเดิม)
   const mobileNavItems: MobileNavItem[] = navItems.map(item => ({ ...item, locale: locale }));
 
   return (
@@ -272,7 +265,6 @@ export function NewNavbar({ tNav }: { tNav: NavTranslations }) {
         {/* === Slot 2: กลาง === */}
         <div className="justify-self-center">
             <div className="hidden md:flex">
-              {/* * TAG: [i18n-FIX] (ส่ง locale={locale}) */}
               <MenuLinks 
                 locale={locale}
                 navItems={navItems}
@@ -320,7 +312,6 @@ export function NewNavbar({ tNav }: { tNav: NavTranslations }) {
       {/* (Mobile-Overlay-Layer) */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          // * TAG: [i18n-FIX] (ส่ง mobileNavItems ที่มี locale)
           <MobileMenuOverlay 
             items={mobileNavItems} 
             onClose={() => setIsMobileMenuOpen(false)} 
