@@ -20,6 +20,16 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
   },
+  
+  // --- TAG: [THE-FIX] (1/1) ------------------------------
+  // นี่คือการ "ปิด" คำเตือนเรื่อง <img> (no-img-element)
+  // เราเพิ่ม Object ใหม่นี้เข้าไปใน Array
+  {
+    rules: {
+      "@next/next/no-img-element": "off",
+    },
+  },
+  // --- จบการแก้ไข --------------------------------------
 ];
 
 export default eslintConfig;
