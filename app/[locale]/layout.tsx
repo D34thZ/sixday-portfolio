@@ -48,11 +48,11 @@ interface LocaleLayoutProps {
   };
 }
 
-// TAG: [THE-FIX] (4/4) 📍📍📍 ลบ 'async' ออกจากบรรทัดนี้ 📍📍📍
+// TAG: [THE-FIX] (4/4) ลบ 'async' ออกจากบรรทัดนี้
 export default function LocaleLayout({
   children,
   params
-}: LocaleLayoutProps) { // <-- 📍 ใช้ 'LocaleLayoutProps' ที่นี่
+}: LocaleLayoutProps) { // <-- (ส่วนนี้ถูกต้องแล้ว)
 
   const { locale } = params; 
   const messages = locale === 'th' ? thMessages : enMessages;
@@ -84,7 +84,8 @@ export default function LocaleLayout({
         <CustomThemeProvider>
           <ClientProviders messages={messages}>
             
-            <NewNavbar tNav={tNav} />
+            {/* 📍📍📍 นี่คือจุดที่แก้ไข 📍📍📍 */}
+            <NewNavbar tNav={tNav} /> 
             
             <main className="flex-grow">
               {children}
