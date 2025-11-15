@@ -136,7 +136,7 @@ const enContent = {
     phoneRaw: "+66800606884", 
     socialTitle: "Find me online",
     links: {
-      github: "https://github.com/6day-dev", 
+      github: "https://github.com/sixday-dev", 
       facebook: "https://www.facebook.com/k.khunon",
       instagram: "https://www.instagram.com/krishkhunon",
       tiktok: "https://www.tiktok.com/@chrisparker6969",
@@ -244,7 +244,7 @@ const thContent = {
     phoneRaw: "+66800606884", 
     socialTitle: "ช่องทางติดตาม",
     links: {
-      github: "https://github.com/6day-dev", 
+      github: "https://github.com/sixday-dev", 
       facebook: "https://www.facebook.com/k.khunon",
       instagram: "https://www.instagram.com/krishkhunon/",
       tiktok: "https://www.tiktok.com/@chrisparker6969",
