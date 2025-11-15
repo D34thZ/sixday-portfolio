@@ -45,46 +45,67 @@ export default function HeroHeader({ t }: HeroHeaderProps) {
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
 
+    // --- TAG: [THE-FIX] (3/7) แก้ไข Class Particle ---
     class Particle {
       x: number; y: number; vx: number; vy: number; size: number; life: number;
-      constructor() {
+      
+      // TAG: [THE-FIX] (4/7) เพิ่ม private properties
+      private canvas: HTMLCanvasElement;
+      private ctx: CanvasRenderingContext2D;
+
+      // TAG: [THE-FIX] (5/7) รับ canvas และ ctx เข้ามาใน constructor
+      constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+        this.canvas = canvas; // <-- บันทึก canvas ที่รับมา
+        this.ctx = ctx;       // <-- บันทึก ctx ที่รับมา
+        
         this.x = 0; this.y = 0; this.vx = 0; this.vy = 0; this.size = 0; this.life = 0;
         this.reset();
       }
+      
       reset() {
-        this.x = Math.random() * canvas.offsetWidth;
-        this.y = Math.random() * canvas.offsetHeight;
+        // TAG: [THE-FIX] (6/7) เปลี่ยนไปใช้ 'this.canvas'
+        this.x = Math.random() * this.canvas.offsetWidth;
+        this.y = Math.random() * this.canvas.offsetHeight;
         this.vx = (Math.random() - 0.5) * 0.3;
         this.vy = (Math.random() - 0.5) * 0.3;
         this.size = Math.random() * 1.5 + 0.5;
         this.life = Math.random();
       }
+      
       update() {
         this.x += this.vx; this.y += this.vy; this.life += 0.001;
-        if (this.x < 0 || this.x > canvas.offsetWidth || this.y < 0 || this.y > canvas.offsetHeight) {
+        // TAG: [THE-FIX] (6/7) เปลี่ยนไปใช้ 'this.canvas'
+        if (this.x < 0 || this.x > this.canvas.offsetWidth || this.y < 0 || this.y > this.canvas.offsetHeight) {
           this.reset();
         }
       }
+
       draw() {
-        if (!ctx) return;
+        // TAG: [THE-FIX] (6/7) เปลี่ยนไปใช้ 'this.ctx' (ลบ if !ctx ออกได้)
         const isDark = document.documentElement.classList.contains('dark');
         const particleColor = isDark ? 'rgba(147, 197, 253, 0.4)' : 'rgba(59, 130, 246, 0.4)'; 
         const opacity = Math.sin(this.life) * 0.3 + 0.3;
-        ctx.fillStyle = particleColor.replace('0.4', `${opacity * 0.4}`);
-        ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+        this.ctx.fillStyle = particleColor.replace('0.4', `${opacity * 0.4}`);
+        this.ctx.beginPath(); this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); this.ctx.fill();
       }
     }
-    const particles = Array.from({ length: 60 }, () => new Particle());
+    
+    // TAG: [THE-FIX] (7/7) ส่ง (canvas, ctx) ที่การันตีแล้ว เข้าไป
+    const particles = Array.from({ length: 60 }, () => new Particle(canvas, ctx));
+    
     let animationId: number;
     let frame = 0;
+    
     const animate = () => {
-      if (!ctx) return;
+      // (เรามั่นใจแล้วว่า ctx ไม่ null)
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      
       const isDark = document.documentElement.classList.contains('dark');
       ctx.strokeStyle = isDark ? 'rgba(51, 65, 85, 0.2)' : 'rgba(148, 163, 184, 0.15)'; 
       ctx.lineWidth = 0.5;
       const gridSize = 50;
       const perspectiveY = canvas.offsetHeight * 0.7;
+      
       for (let i = 0; i < canvas.offsetWidth; i += gridSize) {
         ctx.beginPath();
         const offset = Math.sin(frame * 0.008 + i * 0.02) * 8;
@@ -95,7 +116,9 @@ export default function HeroHeader({ t }: HeroHeaderProps) {
         const waveOffset = Math.sin(frame * 0.015 + i * 0.01) * 15;
         ctx.moveTo(0, i); ctx.lineTo(canvas.offsetWidth, i + waveOffset); ctx.stroke();
       }
+      
       particles.forEach(p => { p.update(); p.draw(); });
+      
       ctx.strokeStyle = isDark ? 'rgba(147, 197, 253, 0.1)' : 'rgba(59, 130, 246, 0.08)'; 
       ctx.lineWidth = 0.5;
       for (let i = 0; i < particles.length; i++) {
@@ -108,6 +131,7 @@ export default function HeroHeader({ t }: HeroHeaderProps) {
           }
         }
       }
+      
       if (mousePos.x && mousePos.y) {
         const gradient = ctx.createRadialGradient(mousePos.x, mousePos.y, 0, mousePos.x, mousePos.y, 120);
         const glowColor = isDark ? 'rgba(147, 197, 253, 0.1)' : 'rgba(59, 130, 246, 0.08)';
@@ -116,10 +140,13 @@ export default function HeroHeader({ t }: HeroHeaderProps) {
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
       }
+      
       frame++;
       animationId = requestAnimationFrame(animate);
     };
+    
     animate();
+    
     return () => {
       window.removeEventListener('resize', setCanvasSize);
       cancelAnimationFrame(animationId);
