@@ -1,7 +1,7 @@
 // 📍 ที่อยู่ไฟล์: app/[locale]/layout.tsx
 
 // TAG: [THE-FIX] (1/4) Import 'ReactNode'
-import { ReactNode } from 'react';
+import { ReactNode } from 'react'; // (ReactNode ยังต้องใช้)
 import '../globals.css'; 
 import { ClientProviders } from "../ClientProviders";
 import { NewNavbar } from "../components/layout/NewNavbar";
@@ -11,7 +11,7 @@ import { Inter } from 'next/font/google';
 import { CustomThemeProvider } from '../contexts/ThemeContext';
 import { ThemeScript } from '../components/ThemeScript';
 
-// TAG: [THE-FIX] (2/4) ลบ Footer ที่ไม่ได้ใช้ออก (แก้ Warning)
+// TAG: [THE-FIX] (2/4) ลบ Footer ที่ไม่ได้ใช้ออก
 // import Footer from '../components/layout/Footer';
 
 // (ส่วน tNav คงเดิม)
@@ -39,20 +39,26 @@ export const metadata = {
 
 const inter = Inter({ subsets: ['latin'] });
 
-// TAG: [THE-FIX] (3/4) สร้าง Interface สำหรับ Props
-// (ส่วนนี้ถูกต้องแล้ว)
+// TAG: [THE-FIX] (3/4) ลบ Interface 'LocaleLayoutProps' ทิ้ง
+/*
 interface LocaleLayoutProps {
   children: ReactNode;
   params: {
     locale: string;
   };
 }
+*/
 
-// TAG: [THE-FIX] (4/4) ลบ 'async' ออกจากบรรทัดนี้
+// TAG: [THE-FIX] (4/4) 📍📍📍 นี่คือการแก้ไข 📍📍📍
+// เราลบ 'async' และ 'LocaleLayoutProps' ออกทั้งหมด
+// ปล่อยให้ TypeScript "อนุมาน" (Infer) Type เอง
 export default function LocaleLayout({
   children,
   params
-}: LocaleLayoutProps) { // <-- (ส่วนนี้ถูกต้องแล้ว)
+}: {
+  children: ReactNode; // <-- เราแค่ Type 'children'
+  params: { locale: string }; // <-- และ 'params' ตรงนี้
+}) {
 
   const { locale } = params; 
   const messages = locale === 'th' ? thMessages : enMessages;
@@ -84,7 +90,6 @@ export default function LocaleLayout({
         <CustomThemeProvider>
           <ClientProviders messages={messages}>
             
-            {/* 📍📍📍 นี่คือจุดที่แก้ไข 📍📍📍 */}
             <NewNavbar tNav={tNav} /> 
             
             <main className="flex-grow">
