@@ -135,7 +135,7 @@ const enContent = {
     phoneRaw: "+66800606884", 
     socialTitle: "Find me online",
     links: {
-      github: "https://github.com/6day-dev", 
+      github: "https://github.com/sixday-dev", 
       facebook: "https://www.facebook.com/k.khunon",
       instagram: "https://www.instagram.com/krishkhunon",
       tiktok: "https://www.tiktok.com/@chrisparker6969",
@@ -242,7 +242,7 @@ const thContent = {
     phoneRaw: "+66800606884", 
     socialTitle: "ช่องทางติดตาม",
     links: {
-      github: "https://github.com/6day-dev", 
+      github: "https://github.com/sixday-dev", 
       facebook: "https://www.facebook.com/k.khunon",
       instagram: "https://www.instagram.com/krishkhunon/",
       tiktok: "https://www.tiktok.com/@chrisparker6969",
@@ -337,16 +337,18 @@ export default function HomePage() {
             </div>
           </section>
 
-          <WorkSection t={t.work} locale={locale} />
+          {/* TAG: [THE-FIX] ลบ locale={locale} ที่ไม่ได้ใช้ออก */}
+          <WorkSection t={t.work} />
           
-          <ExperienceSection t={t.experience} locale={locale} />
+          {/* TAG: [THE-FIX] ลบ locale={locale} ที่ไม่ได้ใช้ออก */}
+          <ExperienceSection t={t.experience} />
 
           <ContactSection t={t.contact} />
 
         </div>
       </main> {/* <-- ปิด main tag */}
 
-      {/* TAG: [FIX] เพิ่ม Footer ที่นี่ */}
+      {/* TAG: [FIX] เพิ่ม Footer ที่นี่ (ตามที่คุณยืนยันไว้) */}
       <Footer />
 
     </div>
