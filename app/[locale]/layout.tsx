@@ -1,6 +1,7 @@
 // 📍 ที่อยู่ไฟล์: app/[locale]/layout.tsx
 
-// (Imports)
+// TAG: [THE-FIX] (1/4) Import 'ReactNode'
+import { ReactNode } from 'react';
 import '../globals.css'; 
 import { ClientProviders } from "../ClientProviders";
 import { NewNavbar } from "../components/layout/NewNavbar";
@@ -9,8 +10,9 @@ import enMessages from "../../messages/en.json";
 import { Inter } from 'next/font/google'; 
 import { CustomThemeProvider } from '../contexts/ThemeContext';
 import { ThemeScript } from '../components/ThemeScript';
-// TAG: [THE-FIX] (1/3) Import Footer ที่นี่ (บรรทัดนี้ถูกต้องแล้ว)
-import Footer from '../components/layout/Footer';
+
+// TAG: [THE-FIX] (2/4) ลบ Footer ที่ไม่ได้ใช้ออก (แก้ Warning)
+// import Footer from '../components/layout/Footer';
 
 // (ส่วน tNav คงเดิม)
 const enNav = {
@@ -37,13 +39,20 @@ export const metadata = {
 
 const inter = Inter({ subsets: ['latin'] });
 
+// TAG: [THE-FIX] (3/4) สร้าง Interface สำหรับ Props
+// นี่คือการแก้ 'Type error'
+interface LocaleLayoutProps {
+  children: ReactNode;
+  params: {
+    locale: string;
+  };
+}
+
+// TAG: [THE-FIX] (4/4) ใช้ Interface ใหม่แทนการกำหนด Type แบบ inline
 export default async function LocaleLayout({
   children,
   params
-}: {
-  children: React.ReactNode; 
-  params: {locale: string};
-}) {
+}: LocaleLayoutProps) { // <-- 📍 ใช้ 'LocaleLayoutProps' ที่นี่
 
   const { locale } = params; 
   const messages = locale === 'th' ? thMessages : enMessages;
@@ -53,8 +62,7 @@ export default async function LocaleLayout({
     <html 
       lang={locale} 
       suppressHydrationWarning
-      // TAG: [THE-FIX] (2/3) นี่คือจุดที่แก้ Dark Mode ครับ!
-      // ย้าย Gradient Background จาก page.tsx มาไว้ที่ <html>
+      // TAG: (คงเดิม) Gradient Background
       className="
         bg-gradient-to-br from-slate-50 via-gray-100 to-slate-200 
         dark:from-slate-900 dark:via-slate-950 dark:to-black 
@@ -66,8 +74,7 @@ export default async function LocaleLayout({
         <ThemeScript />
       </head>
 
-      {/* TAG: [THE-FIX] (3/3) นี่คือโครงสร้างที่ถูกต้องตาม Master Plan */}
-      {/* 1. เพิ่ม min-h-screen, flex, flex-col ที่ <body> */}
+      {/* TAG: (คงเดิม) โครงสร้าง Body */}
       <body className={`
         ${inter.className} 
         text-slate-900 dark:text-slate-50 transition-colors duration-300
@@ -79,18 +86,15 @@ export default async function LocaleLayout({
             
             <NewNavbar tNav={tNav} />
             
-            {/* 2. เพิ่ม flex-grow ที่ <main> */}
             <main className="flex-grow">
               {children}
             </main>
 
           </ClientProviders>
-          
-          {/* TAG: [THE-FIX] (3/3) เพิ่ม Footer ที่นี่ */}
-          {/* นี่คือการแก้ Warning: 'Footer' is defined but never used */}
-
         </CustomThemeProvider>
         
+        {/* (Footer จะถูก Render จาก page.tsx ตามที่คุณยืนยันไว้) */}
+
       </body>
     </html>
   );
