@@ -21,80 +21,85 @@ const mockProjects = [
   // --- Pattern 1 (Index 0-4) ---
   {
     id: 1,
-    title: "Project Alpha",
+    title: "JOBESAN - เว็บแอปหางาน (React & Supabase)",
     categoryKey: "fullStack", // ใช้ 'fullStack', 'uiUx', หรือ 'data'
     // TAG: [Placeholder] รูปภาพการ์ด 1
-    imageUrl: "https://placehold.co/800x600/1E40AF/FFFFFF?text=Project+Alpha", 
+    imageUrl: "images/job-details-page.jpg",
+    projectUrl: "https://github.com/sixday-dev/jobesan-app-showcase" 
   },
   {
     id: 2,
-    title: "Brand Redesign 'B'",
+    title: "ZEAL PROTECH - เว็บไซต์ Renewal (HTML/CSS/JS)",
     categoryKey: "uiUx",
     // TAG: [Placeholder] รูปภาพการ์ด 2
-    imageUrl: "https://placehold.co/800x600/BE185D/FFFFFF?text=Project+Beta",
+    imageUrl: "images/zeal-home-desktop.jpg",
+    projectUrl: "https://github.com/sixday-dev/zeal-website-showcase"
   },
   {
     id: 3,
-    title: "Data Insights Platform",
-    categoryKey: "data",
+    title: "UDA Website - การยกเครื่อง UI/UX (React)",
+    categoryKey: "uiUx",
     // TAG: [Placeholder] รูปภาพการ์ด 3
-    imageUrl: "https://placehold.co/800x600/047857/FFFFFF?text=Project+Gamma",
+    imageUrl: "images/about-us-page.jpg",
+    projectUrl: "https://github.com/sixday-dev/uda-website-showcase"
   },
   {
     // TAG: นี่คือการ์ดที่ 4 (index 3) ที่จะเป็นการ์ดใหญ่
     id: 4,
-    title: "Enterprise SaaS Solution",
-    categoryKey: "fullStack",
+    title: "ZEAL Warranty - ระบบประกันและวิเคราะห์ข้อมูล (Data-Driven)",
+    categoryKey: "data",
     // TAG: [Placeholder] รูปภาพการ์ด 4 (ใหญ่)
-    imageUrl: "https://placehold.co/1200x675/9A3412/FFFFFF?text=Project+Delta+(Large)",
+    imageUrl: "images/dashboard-qr-print.jpg",
+    projectUrl: "https://github.com/sixday-dev/zeal-warranty-system"
   },
   {
     // TAG: นี่คือการ์ดที่ 5 (index 4) ที่จะอยู่ข้างการ์ดใหญ่ (แนวตั้ง)
     id: 5,
-    title: "Mobile App 'Epsilon'",
-    categoryKey: "uiUx",
+    title: "UD Auto Glass - ระบบจองคิวและ Dashboard (Full-Stack)",
+    categoryKey: "fullStack",
     // TAG: [Placeholder] รูปภาพการ์ด 5
-    imageUrl: "https://placehold.co/600x800/581C87/FFFFFF?text=Project+Epsilon",
+    imageUrl: "images/booking-step2-calendar.jpg",
+    projectUrl: "https://github.com/sixday-dev/showcase-ud-auto-glass-UDG"
   },
   
   // --- Pattern 2 (Index 5-9) ---
-  {
-    id: 6,
-    title: "Project Zeta",
-    categoryKey: "data",
+  //{
+  //  id: 6,
+  //  title: "Project Zeta",
+  //  categoryKey: "data",
     // TAG: [Placeholder] รูปภาพการ์ด 6
-    imageUrl: "https://placehold.co/800x600/166534/FFFFFF?text=Project+Zeta",
-  },
-  {
-    id: 7,
-    title: "Project Eta",
-    categoryKey: "fullStack",
+  //  imageUrl: "https://placehold.co/800x600/166534/FFFFFF?text=Project+Zeta",
+  //},
+  //{
+  //  id: 7,
+  //  title: "Project Eta",
+  //  categoryKey: "fullStack",
     // TAG: [Placeholder] รูปภาพการ์ด 7
-    imageUrl: "https://placehold.co/800x600/991B1B/FFFFFF?text=Project+Eta",
-  },
-  {
-    id: 8,
-    title: "Brand Identity 'Theta'",
-    categoryKey: "uiUx",
+  //  imageUrl: "https://placehold.co/800x600/991B1B/FFFFFF?text=Project+Eta",
+  //},
+  //{
+  //  id: 8,
+  //  title: "Brand Identity 'Theta'",
+  //  categoryKey: "uiUx",
     // TAG: [Placeholder] รูปภาพการ์ด 8
-    imageUrl: "https://placehold.co/800x600/1D4ED8/FFFFFF?text=Project+Theta",
-  },
-  {
+  //  imageUrl: "https://placehold.co/800x600/1D4ED8/FFFFFF?text=Project+Theta",
+  //},
+  //{
     // TAG: การ์ดที่ 9 (index 8) -> (index % 5) = 3 -> เป็นการ์ดใหญ่
-    id: 9,
-    title: "AI Analytics Tool",
-    categoryKey: "data",
+  //  id: 9,
+  //  title: "AI Analytics Tool",
+  //  categoryKey: "data",
     // TAG: [Placeholder] รูปภาพการ์ด 9 (ใหญ่)
-    imageUrl: "https://placehold.co/1200x675/7E22CE/FFFFFF?text=Project+Iota+(Large)",
-  },
-  {
+  //  imageUrl: "https://placehold.co/1200x675/7E22CE/FFFFFF?text=Project+Iota+(Large)",
+  //},
+  //{
     // TAG: การ์ดที่ 10 (index 9) -> (index % 5) = 4 -> เป็นการ์ดแนวตั้ง
-    id: 10,
-    title: "Project Kappa",
-    categoryKey: "fullStack",
+  //  id: 10,
+  //  title: "Project Kappa",
+  //  categoryKey: "fullStack",
     // TAG: [Placeholder] รูปภาพการ์ด 10
-    imageUrl: "https://placehold.co/600x800/B45309/FFFFFF?text=Project+Kappa",
-  },
+  //  imageUrl: "https://placehold.co/600x800/B45309/FFFFFF?text=Project+Kappa",
+  //},
 ];
 // --------------------------------------------------------------------------------
 

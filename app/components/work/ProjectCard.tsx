@@ -38,6 +38,8 @@ type Project = {
   categoryKey: 'fullStack' | 'uiUx' | 'data'; // Key สำหรับดึงคำแปล
   // TAG: [Placeholder] นี่คือจุดที่ระบุ URL ของรูปภาพ
   imageUrl: string; 
+  // TAG: [THE-FIX] (1/3) อัปเดต Type ให้รู้จัก projectUrl
+  projectUrl: string; 
 };
 
 // Type สำหรับคำแปลที่รับมาจาก WorkSection (t.card)
@@ -65,10 +67,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, tCard, cardStyle }) 
   const transition = { duration: 0.3, ease: "easeInOut" };
 
   return (
-    // TAG: Card Wrapper
-    // "group" คือหัวใจสำคัญที่ทำให้ 'group-hover:' ใช้งานได้
-    // "initial" และ "whileHover" จะไปสั่งงาน Variants ที่เรากำหนดไว้
-    <motion.div
+    // TAG: [THE-FIX] (2/3) 
+    // - เปลี่ยนจาก <motion.div> เป็น <motion.a> (แท็กลิงก์)
+    // - เพิ่ม href, target, และ rel
+    <motion.a
+      href={project.projectUrl}
+      target="_blank"
+      rel="noopener noreferrer"
       className={`${cardStyle} relative overflow-hidden rounded-2xl group cursor-pointer shadow-lg`}
       initial="initial"
       whileHover="hover"
@@ -130,7 +135,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, tCard, cardStyle }) 
           </motion.div>
         </div>
       </div>
-    </motion.div>
+    </motion.a> // <-- TAG: [THE-FIX] (3/3) ปิดด้วย </motion.a>
   );
 };
 
