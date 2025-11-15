@@ -22,7 +22,7 @@ const mockProjects = [
   {
     id: 1,
     title: "JOBESAN - เว็บแอปหางาน (React & Supabase)",
-    categoryKey: "fullStack", // ใช้ 'fullStack', 'uiUx', หรือ 'data'
+    categoryKey: "fullStack", // ใช้ 'fullStack', 'uiUx', 'data'
     // TAG: [Placeholder] รูปภาพการ์ด 1
     imageUrl: "images/job-details-page.jpg",
     projectUrl: "https://github.com/sixday-dev/jobesan-app-showcase" 
@@ -123,14 +123,22 @@ interface WorkTranslations {
   };
 }
 
+// TAG: [THE-FIX] (2/2) 📍📍📍 นี่คือจุดที่แก้ไข (จุดที่ 1) 📍📍📍
+// สร้าง Type 'FilterKey' จาก 'WorkTranslations'
+type FilterKey = keyof WorkTranslations['filters'];
+
+
 // (Interface และ filterCategories คงเดิม)
 interface WorkSectionProps {
-  t: WorkTranslations; // <-- เปลี่ยนจาก 'any'
-  // locale: string; // <-- 'locale' ถูกลบออก เพราะ Vercel แจ้งว่าไม่ได้ใช้
+  t: WorkTranslations; // <-- (เราแก้ 'any' ไปแล้ว)
+  // locale: string; // <-- (เราลบ 'locale' ไปแล้ว)
 }
-const filterCategories = ["all", "fullStack", "uiUx", "data"];
 
-// TAG: [THE-FIX] (2/2) ลบ 'locale' ออกจาก props (เพราะ Vercel แจ้งว่าไม่ได้ใช้)
+// TAG: [THE-FIX] (2/2) 📍📍📍 นี่คือจุดที่แก้ไข (จุดที่ 2) 📍📍📍
+// บอก TypeScript ว่า Array นี้ ใช้ 'FilterKey' ไม่ใช่ 'string' ทั่วไป
+const filterCategories: FilterKey[] = ["all", "fullStack", "uiUx", "data"];
+
+// TAG: (เราลบ 'locale' ออกจาก props ที่รับมาแล้ว)
 const WorkSection: React.FC<WorkSectionProps> = ({ t }) => {
   // (State และ Logic การ Filter คงเดิม)
   const [activeFilter, setActiveFilter] = useState("all");
@@ -199,6 +207,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ t }) => {
         
         {/* Sub-row 1: Filter Buttons (คงเดิม) */}
         <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mb-12">
+          {/* 'key' ใน .map() ตอนนี้เป็น 'FilterKey' (Type-Safe) */}
           {filterCategories.map((key) => {
             const isActive = activeFilter === key;
             return (
@@ -213,6 +222,7 @@ const WorkSection: React.FC<WorkSectionProps> = ({ t }) => {
                   }
                 `}
               >
+                {/* (บรรทัด 216) ตอนนี้ถูกต้องแล้ว เพราะ TypeScript รู้ว่า 'key' คือ 'FilterKey' */}
                 {tWork.filters[key]}
               </button>
             );
