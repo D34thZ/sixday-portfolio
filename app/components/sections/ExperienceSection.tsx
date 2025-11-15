@@ -11,6 +11,7 @@ import { MapPin, Globe, Plus, Minus } from "lucide-react";
 
 // --------------------------------------------------------------------------------
 // TAG: Animation Variants
+// (ส่วนนี้คงเดิม 100%)
 // --------------------------------------------------------------------------------
 const contentVariants = {
   // สถานะ "พับเก็บ" (collapsed)
@@ -39,7 +40,8 @@ interface ExperienceSectionProps {
     title: string;
     items: ExperienceItemProps[];
   };
-  locale: string;
+  // TAG: [THE-FIX] (1/2) ลบ 'locale: string;' ที่ไม่ได้ใช้ออก
+  // locale: string;
 }
 
 // Type สำหรับข้อมูลแต่ละรายการ
@@ -57,7 +59,8 @@ interface ExperienceItemProps {
 // TAG: ExperienceSection Component
 // --------------------------------------------------------------------------------
 
-const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t, locale }) => {
+// TAG: [THE-FIX] (2/2) ลบ 'locale' ออกจาก props ที่รับมา
+const ExperienceSection: React.FC<ExperienceSectionProps> = ({ t }) => {
   // State สำหรับเก็บ Index ของแถบที่กำลังเปิดอยู่ (null = ปิดทั้งหมด)
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 

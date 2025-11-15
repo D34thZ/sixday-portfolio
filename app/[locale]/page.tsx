@@ -40,6 +40,7 @@ const IconCode = (props: React.SVGProps<SVGSVGElement>) => (
 
 // --------------------------------------------------------------------------------
 // TAG: [Content] English Content
+// (ย่อไว้)
 // --------------------------------------------------------------------------------
 const enContent = {
   hero: {
@@ -135,7 +136,7 @@ const enContent = {
     phoneRaw: "+66800606884", 
     socialTitle: "Find me online",
     links: {
-      github: "https://github.com/sixday-dev", 
+      github: "https://github.com/6day-dev", 
       facebook: "https://www.facebook.com/k.khunon",
       instagram: "https://www.instagram.com/krishkhunon",
       tiktok: "https://www.tiktok.com/@chrisparker6969",
@@ -147,6 +148,7 @@ const enContent = {
 
 // --------------------------------------------------------------------------------
 // TAG: [Content] Thai Content
+// (ย่อไว้)
 // --------------------------------------------------------------------------------
 const thContent = {
   hero: {
@@ -170,7 +172,7 @@ const thContent = {
     cards: [
       { icon: IconReact, title: "การพัฒนาแบบ Full-Stack", sub: "React, Next.js", desc: "ประสบการณ์มากกว่า 5 ปี ในการสร้างเว็บแอปพลิเคชันสมัยใหม่ประสิทธิภาพสูง มีประสบการณ์ลึกซึ้งกับ JavaScript, TypeScript, React, Next.js และการเชื่อมต่อบริการ Backend อย่าง Firebase, Supabase และ PostgreSQL" },
       { icon: IconDesign, title: "การออกแบบกราฟิก & UI/UX", sub: "ประสบการณ์มากกว่า 11 ปี", desc: "มองปัญหาด้วยสายตาของดีไซเนอร์ แก้ปัญหาด้วยสมองของนักพัฒนา ประสบการณ์กว่าทศวรรษในการสร้างแบรนด์, อัตลักษณ์องค์กร (Branding) และการออกแบบ User Interface (UI/UX) ที่สวยงามและใช้งานง่าย" },
-      { icon: IconStrategy, title: "กลยุทธ์ดิจิทัล & ข้อมูล", sub: "โซลูชันที่ขับเคลื่อนด้วยธุรกิจ", desc: "การสร้างซอฟต์แวร์ไม่ใช่แค่การเขียนโค้ด แต่คือการแก้ปัญหาทางธุรกิจในโลกแห่งความเป็นจริง ประสบการณ์มากกว่า 4 ปี ด้านการตลาดดิจิทัล, การวิเคราะห์ข้อมูล และการพัฒนาโซลูชันที่สร้างผลลัพธ์ที่วัดผลได้จริง" }
+      { icon: IconStrategy, title: "กลยุทธ์ดิจิทัล & ข้อมูล", sub: "โซลูชันที่ขับเคลื่อนด้วยธุรกิจ", desc: "การสร้างซอฟต์แewvไม่่ใช่แค่การเขียนโค้ด แต่คือการแก้ปัญหาทางธุรกิจในโลกแห่งความเป็นจริง ประสบการณ์มากกว่า 4 ปี ด้านการตลาดดิจิทัล, การวิเคราะห์ข้อมูล และการพัฒนาโซลูชันที่สร้างผลลัพธ์ที่วัดผลได้จริง" }
     ]
   },
   work: {
@@ -242,7 +244,7 @@ const thContent = {
     phoneRaw: "+66800606884", 
     socialTitle: "ช่องทางติดตาม",
     links: {
-      github: "https://github.com/sixday-dev", 
+      github: "https://github.com/6day-dev", 
       facebook: "https://www.facebook.com/k.khunon",
       instagram: "https://www.instagram.com/krishkhunon/",
       tiktok: "https://www.tiktok.com/@chrisparker6969",
@@ -337,10 +339,10 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* TAG: [THE-FIX] ลบ locale={locale} ที่ไม่ได้ใช้ออก */}
+          {/* TAG: [THE-FIX] ลบ locale={locale} (ที่ไม่ได้ใช้) ออก */}
           <WorkSection t={t.work} />
           
-          {/* TAG: [THE-FIX] ลบ locale={locale} ที่ไม่ได้ใช้ออก */}
+          {/* TAG: [THE-FIX] ลบ locale={locale} (ที่ไม่ได้ใช้) ออก */}
           <ExperienceSection t={t.experience} />
 
           <ContactSection t={t.contact} />
